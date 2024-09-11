@@ -29,8 +29,7 @@
       inherit (forEachSystem (system:
         let
           # see :help nixCats.flake.outputs.overlays
-          dependencyOverlays = (import ./overlays inputs) ++ [
-            # This overlay grabs all the inputs named in the format
+          dependencyOverlays = (import ./overlays inputs) ++ [ # This overlay grabs all the inputs named in the format
             # `plugins-<pluginName>`
             # Once we add this overlay to our nixpkgs, we are able to
             # use `pkgs.neovimPlugins`, which is a set of our plugins.
@@ -299,14 +298,16 @@
         let
           idev = pkgs.writeShellScriptBin "idev" ''
             exec -a shell ${pkgs.neovide}/bin/neovide --no-fork --neovim-bin "${nixCatsPackage}/bin/${defaultPackageName}" "$@"
-          '';
+          ''; 
+        in
+        let allPackages = [ nixCatsPackage idev pkgs.lazygit];
         in
         {
           # these outputs will be wrapped with ${system} by utils.eachSystem
 
           # this will make a package out of each of the packageDefinitions defined above
           # and set the default package to the one named here.
-          packages = { dev = nixCatsPackage; idev = idev; } // utils.mkExtraPackages nixCatsBuilder packageDefinitions;
+          packages = { packages = allPackages; } // utils.mkExtraPackages nixCatsBuilder packageDefinitions;
 
 
           # choose your package for devShell
@@ -314,7 +315,7 @@
           devShells = {
             default = pkgs.mkShell {
               name = defaultPackageName;
-              packages = [ idev nixCatsPackage ];
+              packages = allPackages;
               inputsFrom = [ ];
               shellHook = ''
         '';
