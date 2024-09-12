@@ -300,7 +300,7 @@
             exec -a shell ${pkgs.neovide}/bin/neovide --no-fork --neovim-bin "${nixCatsPackage}/bin/${defaultPackageName}" "$@"
           ''; 
         in
-        let allPackages = [ nixCatsPackage idev pkgs.lazygit];
+        let allPackages = { dev = nixCatsPackage; idev = idev; lazygit = pkgs.lazygit; };
         in
         {
           # these outputs will be wrapped with ${system} by utils.eachSystem
@@ -315,7 +315,7 @@
           devShells = {
             default = pkgs.mkShell {
               name = defaultPackageName;
-              packages = allPackages;
+              packages = pkgs.lib.attrsets.attrValues allPackages;
               inputsFrom = [ ];
               shellHook = ''
         '';
