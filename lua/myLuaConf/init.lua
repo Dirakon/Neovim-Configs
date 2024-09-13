@@ -5,6 +5,7 @@ require("myLuaConf.LSPs")
 -- Some general remappings (TODO: different files?)
 
 
+vim.keymap.set('n', '<C-b>', ':b#<CR>', { desc = 'Switch with last [B]uffer' })
 
 vim.keymap.set('n', '<leader>x', ':bd<CR>', { desc = 'Close buffer' })
 -- vim.keymap.set('n', '<leader>X', ':close<CR>', { desc = 'close file' })
