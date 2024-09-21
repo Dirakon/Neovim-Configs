@@ -29,7 +29,8 @@
       inherit (forEachSystem (system:
         let
           # see :help nixCats.flake.outputs.overlays
-          dependencyOverlays = (import ./overlays inputs) ++ [ # This overlay grabs all the inputs named in the format
+          dependencyOverlays = (import ./overlays inputs) ++ [
+            # This overlay grabs all the inputs named in the format
             # `plugins-<pluginName>`
             # Once we add this overlay to our nixpkgs, we are able to
             # use `pkgs.neovimPlugins`, which is a set of our plugins.
@@ -127,6 +128,7 @@
                   camelcasemotion
                   telescope-fzf-native-nvim
                   telescope-ui-select-nvim
+                  telescope-live-grep-args-nvim
                   plenary-nvim
                   telescope-nvim
                   omnisharp-extended-lsp-nvim
@@ -298,16 +300,18 @@
         let
           idev = pkgs.writeShellScriptBin "idev" ''
             exec -a shell ${pkgs.neovide}/bin/neovide --no-fork --neovim-bin "${nixCatsPackage}/bin/${defaultPackageName}" "$@"
-          ''; 
-        in
-        let allPackages = { dev = nixCatsPackage; idev = idev; lazygit = pkgs.lazygit; };
+          '';
+      in
+        let cliUtils = { lazygit = pkgs.lazygit; }; in 
+        let general = { dev = nixCatsPackage; idev = idev; }; in 
+        let allPackages = general // cliUtils; 
         in
         {
           # these outputs will be wrapped with ${system} by utils.eachSystem
 
           # this will make a package out of each of the packageDefinitions defined above
           # and set the default package to the one named here.
-          packages = { packages = allPackages; } // utils.mkExtraPackages nixCatsBuilder packageDefinitions;
+          packages = { packages = allPackages; general = general; cliUtils = cliUtils; } // utils.mkExtraPackages nixCatsBuilder packageDefinitions;
 
 
           # choose your package for devShell

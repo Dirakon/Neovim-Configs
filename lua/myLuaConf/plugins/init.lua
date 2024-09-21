@@ -10,7 +10,9 @@ require('myLuaConf.plugins.oil')
 require('myLuaConf.plugins.surround')
 require('myLuaConf.plugins.git')
 require('myLuaConf.plugins.neotest')
-require('myLuaConf.plugins.dbee')
+
+-- some problems
+--require('myLuaConf.plugins.dbee')
 
 -- Dont like it
 -- require('myLuaConf.plugins.autoSession')
