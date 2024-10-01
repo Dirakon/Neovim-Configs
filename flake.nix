@@ -76,7 +76,7 @@
             neonixdev = {
               # also you can do this.
               inherit (pkgs) nix-doc nil lua-language-server nixd omnisharp-roslyn roslyn-ls clang-tools;
-              inherit (pkgs.nodePackages) typescript-language-server bash-language-server;
+              inherit (pkgs.nodePackages) typescript-language-server bash-language-server vscode-langservers-extracted;
               # nix-doc tags will make your tags much better in nix
               # but only if you have nil as well for some reason
             };
