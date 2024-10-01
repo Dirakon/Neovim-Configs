@@ -71,10 +71,12 @@
               ripgrep
               fd
               lazygit
+              nodePackages.typescript
             ];
             neonixdev = {
               # also you can do this.
               inherit (pkgs) nix-doc nil lua-language-server nixd omnisharp-roslyn roslyn-ls clang-tools;
+              inherit (pkgs.nodePackages) typescript-language-server bash-language-server;
               # nix-doc tags will make your tags much better in nix
               # but only if you have nil as well for some reason
             };
@@ -236,6 +238,7 @@
           # see :help nixCats.flake.outputs.packageDefinitions
           categories = {
             useVscodeLspOverOmnisharp = false;
+            tsPath = "${pkgs.nodePackages.typescript}/bin/tsserver";
             generalBuildInputs = true;
             markdown = true;
             general.vimPlugins = true;
@@ -301,10 +304,10 @@
           idev = pkgs.writeShellScriptBin "idev" ''
             exec -a shell ${pkgs.neovide}/bin/neovide --no-fork --neovim-bin "${nixCatsPackage}/bin/${defaultPackageName}" "$@"
           '';
-      in
-        let cliUtils = { lazygit = pkgs.lazygit; }; in 
-        let general = { dev = nixCatsPackage; idev = idev; }; in 
-        let allPackages = general // cliUtils; 
+        in
+        let cliUtils = { lazygit = pkgs.lazygit; }; in
+        let general = { dev = nixCatsPackage; idev = idev; }; in
+        let allPackages = general // cliUtils;
         in
         {
           # these outputs will be wrapped with ${system} by utils.eachSystem

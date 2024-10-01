@@ -48,6 +48,13 @@ local servers = {}
 --
 -- end
 --
+servers.bashls = {
+  cmd = {
+    "bash-language-server",
+    "start"
+  },
+  filetypes = { "sh", "zsh" }
+}
 servers.lua_ls = {
   Lua = {
     formatters = {
@@ -63,10 +70,24 @@ servers.lua_ls = {
   filetypes = { 'lua' },
 }
 -- if require('nixCatsUtils').isNixCats then
-servers.nixd = {}
+servers.nixd = {} -- nix (i think)
 -- else servers.rnix = {}
 -- end
-servers.nil_ls = {}
+servers.nil_ls = {}  -- nix (i think)
+servers.jsonls = {}  -- json
+servers.ts_ls = { -- ts/js
+  cmd = {
+    "typescript-language-server",
+    "--stdio"
+  },
+  init_options = {
+    tsserver = {
+      path = nixCats('tsPath')
+    },
+    hostInfo = "neovim",
+  },
+
+}
 
 -- This is this flake's version of what kickstarter has set up for mason handlers.
 -- This is a convenience function that calls lspconfig on the lsps we downloaded via nix
@@ -80,7 +101,7 @@ servers.nil_ls = {}
 --  define the property 'filetypes' to the map in question.
 --  You may do the same thing with cmd
 
-servers.clangd = {}
+servers.clangd = {} -- c(++)
 -- servers.gopls = {},
 -- servers.pyright = {},
 -- servers.rust_analyzer = {},
@@ -165,7 +186,6 @@ end
 
 
 
-
 -- if require('nixCatsUtils').isNixCats then
 for server_name, _ in pairs(servers) do
   require('lspconfig')[server_name].setup({
@@ -175,6 +195,7 @@ for server_name, _ in pairs(servers) do
     settings = servers[server_name],
     filetypes = (servers[server_name] or {}).filetypes,
     cmd = (servers[server_name] or {}).cmd,
+    init_options = (servers[server_name] or {}).init_options,
     root_pattern = (servers[server_name] or {}).root_pattern,
   })
 end
