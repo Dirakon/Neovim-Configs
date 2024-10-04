@@ -75,7 +75,12 @@
             ];
             neonixdev = {
               # also you can do this.
-              inherit (pkgs) nix-doc nil lua-language-server nixd omnisharp-roslyn roslyn-ls clang-tools;
+              inherit (pkgs) nix-doc nil lua-language-server nixd omnisharp-roslyn clang-tools;
+              
+              # Wanted this juicy source-generated go to definition, but master is too unstable it seems( Getting weird unrelated errors
+              # roslyn-ls = (import ./rolsyn.nix {pkgs = pkgs;});
+
+              roslyn-ls = pkgs.roslyn-ls;
               inherit (pkgs.nodePackages) typescript-language-server bash-language-server vscode-langservers-extracted;
               # nix-doc tags will make your tags much better in nix
               # but only if you have nil as well for some reason
