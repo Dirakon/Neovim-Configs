@@ -75,8 +75,8 @@
             ];
             neonixdev = {
               # also you can do this.
-              inherit (pkgs) nix-doc nil lua-language-server nixd omnisharp-roslyn clang-tools;
-              
+              inherit (pkgs) nix-doc nil lua-language-server nixd omnisharp-roslyn clang-tools pyright;
+
               # Wanted this juicy source-generated go to definition, but master is too unstable it seems( Getting weird unrelated errors
               # roslyn-ls = (import ./rolsyn.nix {pkgs = pkgs;});
 
