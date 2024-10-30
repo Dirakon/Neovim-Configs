@@ -129,6 +129,11 @@
                   lspkind-nvim
                 ];
                 general = with pkgs.vimPlugins; [
+                  transparent-nvim
+                  mini-nvim
+                  leap-nvim
+                  vim-tmux-navigator
+
                   auto-session
                   neotest
                   neotest-dotnet
