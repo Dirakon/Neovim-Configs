@@ -22,6 +22,9 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- For ,w ,b ,e -- camel case navigation
 vim.g.camelcasemotion_key = ","
 
+-- Recomended settings for session restore stuff
+vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
 local pos_equal = function(p1, p2)
 	local r1, c1 = unpack(p1)
 	local r2, c2 = unpack(p2)
@@ -93,11 +96,11 @@ vim.keymap.set("n", ']D', goto_next_diagnostic, { noremap = true, desc = 'Jump t
 -- vim.o.clipboard = 'unnamedplus'
 
 -- You should instead use these keybindings so that they are still easy to use, but dont conflict
-vim.keymap.set("n", '<leader>y', '"+y', { noremap = true, silent = true, desc = '[Y]ank to clipboard' })
-vim.keymap.set({ "v", "x" }, '<leader>y', '"+y', { noremap = true, silent = true, desc = '[Y]ank to clipboard' })
-vim.keymap.set({ "n", "v", "x" }, '<leader>yy', '"+yy',
-	{ noremap = true, silent = true, desc = '[Y]ank line to clipboard' })
-vim.keymap.set({ "n", "v", "x" }, '<leader>Y', '"+yy', { noremap = true, silent = true, desc = '[Y]ank line to clipboard' })
+vim.keymap.set({"n", "v", "x"}, '<leader>y', '"+y', { noremap = true, silent = true, desc = '[Y]ank to clipboard' })
+-- vim.keymap.set({ "v", "x" }, '<leader>y', '"+y', { noremap = true, silent = true, desc = '[Y]ank to clipboard' })
+-- vim.keymap.set({ "n", "v", "x" }, '<leader>y', '"+yy',
+-- 	{ noremap = true, silent = true, desc = '[Y]ank line to clipboard' })
+-- vim.keymap.set({ "n", "v", "x" }, '<leader>Y', '"+yy', { noremap = true, silent = true, desc = '[Y]ank line to clipboard' })
 vim.keymap.set({ "n", "v", "x" }, '<C-a>', 'gg0vG$', { noremap = true, silent = true, desc = 'select all' })
 vim.keymap.set({ 'n', 'v', 'x' }, '<leader>p', '"+p', { noremap = true, silent = true, desc = '[P]aste from clipboard' })
 vim.keymap.set('i', '<C-p>', '<C-r><C-p>+',

@@ -34,7 +34,8 @@ cmp.setup {
     ['<C-p>'] = cmp.mapping.scroll_docs(-4),
     ['<C-n>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete {},
-    ['<C-CR>'] = cmp.mapping.confirm {
+    -- Original ctr-enter ('<C-CR>') does not work with tmux in alacrity... wtf... TODO:
+    ['<C-y>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
