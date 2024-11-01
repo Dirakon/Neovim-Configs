@@ -9,9 +9,10 @@ require('myLuaConf.plugins.completion')
 require('myLuaConf.plugins.oil')
 require('myLuaConf.plugins.surround')
 require('myLuaConf.plugins.git')
-require('myLuaConf.plugins.neotest')
+--require('myLuaConf.plugins.neotest')
 require('myLuaConf.plugins.mini')
 require('myLuaConf.plugins.leap')
+require('myLuaConf.plugins.dotnet')
 
 -- some problems
 --require('myLuaConf.plugins.dbee')

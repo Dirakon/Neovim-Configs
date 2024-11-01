@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "easy-dotnet": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1730146439,
+        "narHash": "sha256-PJEKpoEOmf63frLKiHtaOmduKWQTbpggjHcQAdL2OFs=",
+        "owner": "GustavEikaas",
+        "repo": "easy-dotnet.nvim",
+        "rev": "a1e528bdf75846408e6c7ecaebf82d494b886bd1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "GustavEikaas",
+        "repo": "easy-dotnet.nvim",
+        "type": "github"
+      }
+    },
     "nixCats": {
       "locked": {
         "lastModified": 1730202844,
@@ -33,6 +49,7 @@
     },
     "root": {
       "inputs": {
+        "easy-dotnet": "easy-dotnet",
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
         "roslyn-nvim": "roslyn-nvim"

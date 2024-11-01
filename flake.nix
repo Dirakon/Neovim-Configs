@@ -15,9 +15,13 @@
       url = "github:seblj/roslyn.nvim";
       flake = false;
     };
+    easy-dotnet = {
+      url = "github:GustavEikaas/easy-dotnet.nvim";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, nixCats, roslyn-nvim, ... }@inputs:
+  outputs = { self, nixpkgs, nixCats, roslyn-nvim, easy-dotnet, ... }@inputs:
     let
       utils = nixCats.utils;
       luaPath = "${./.}";
@@ -151,6 +155,7 @@
                   nvim-treesitter.withAllGrammars
                   nvim-lspconfig
                   (mkNvimPlugin roslyn-nvim "roslyn-nvim")
+                  (mkNvimPlugin easy-dotnet "easy-dotnet")
                   fidget-nvim
                   lualine-lsp-progress
                   lualine-nvim
