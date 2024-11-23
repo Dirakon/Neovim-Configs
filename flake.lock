@@ -16,6 +16,22 @@
         "type": "github"
       }
     },
+    "multicursor-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1731154584,
+        "narHash": "sha256-oaDWTMCBjqcPw3TizgTSHvvAsIpPzCqh+Q1aXSvHMC8=",
+        "owner": "jake-stewart",
+        "repo": "multicursor.nvim",
+        "rev": "b715cc5bf69cf6e338899510eb2b60b1dd7ccce0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jake-stewart",
+        "repo": "multicursor.nvim",
+        "type": "github"
+      }
+    },
     "nixCats": {
       "locked": {
         "lastModified": 1730202844,
@@ -50,6 +66,7 @@
     "root": {
       "inputs": {
         "easy-dotnet": "easy-dotnet",
+        "multicursor-nvim": "multicursor-nvim",
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
         "roslyn-nvim": "roslyn-nvim"

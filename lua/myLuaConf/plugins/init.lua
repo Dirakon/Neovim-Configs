@@ -14,8 +14,8 @@ require('myLuaConf.plugins.mini')
 require('myLuaConf.plugins.leap')
 require('myLuaConf.plugins.dotnet')
 
--- some problems
---require('myLuaConf.plugins.dbee')
+-- wtf...
+-- require('myLuaConf.plugins.multicursor')
 
 -- Dont like it
 -- require('myLuaConf.plugins.autoSession')

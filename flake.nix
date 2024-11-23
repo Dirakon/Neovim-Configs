@@ -19,9 +19,13 @@
       url = "github:GustavEikaas/easy-dotnet.nvim";
       flake = false;
     };
+    multicursor-nvim = {
+      url = "github:jake-stewart/multicursor.nvim";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, nixCats, roslyn-nvim, easy-dotnet, ... }@inputs:
+  outputs = { self, nixpkgs, nixCats, roslyn-nvim, easy-dotnet, multicursor-nvim, ... }@inputs:
     let
       utils = nixCats.utils;
       luaPath = "${./.}";
@@ -79,7 +83,7 @@
             ];
             neonixdev = {
               # also you can do this.
-              inherit (pkgs) nix-doc nil lua-language-server nixd omnisharp-roslyn clang-tools pyright;
+              inherit (pkgs) nix-doc nil lua-language-server nixd omnisharp-roslyn clang-tools pyright jdt-language-server;
 
               # Wanted this juicy source-generated go to definition, but master is too unstable it seems( Getting weird unrelated errors
               # roslyn-ls = (import ./rolsyn.nix {pkgs = pkgs;});
@@ -156,6 +160,7 @@
                   nvim-lspconfig
                   (mkNvimPlugin roslyn-nvim "roslyn-nvim")
                   (mkNvimPlugin easy-dotnet "easy-dotnet")
+                  (mkNvimPlugin multicursor-nvim "multicursor-nvim")
                   fidget-nvim
                   lualine-lsp-progress
                   lualine-nvim

@@ -22,6 +22,7 @@ servers.lua_ls = {
 }
 servers.nixd = {} -- nix (i think)
 servers.nil_ls = {}  -- nix (i think)
+servers.jdtls = {}  -- java
 servers.jsonls = {}  -- json
 servers.ts_ls = { -- ts/js
   cmd = {
