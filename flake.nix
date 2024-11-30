@@ -4,7 +4,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
-    nixCats.inputs.nixpkgs.follows = "nixpkgs";
 
     # neovim-nightly-overlay = {
     #   url = "github:nix-community/neovim-nightly-overlay";
@@ -32,6 +31,12 @@
       forEachSystem = utils.eachSystem nixpkgs.lib.platforms.all;
       extra_pkg_config = {
         # allowUnfree = true;
+        permittedInsecurePackages = [
+          "dotnet-core-combined"
+          "dotnet-sdk-6.0.428"
+          "dotnet-sdk-wrapped-6.0.428"
+          "dotnet-sdk-7.0.410"
+        ];
       };
 
       inherit (forEachSystem (system:
@@ -84,6 +89,7 @@
             neonixdev = {
               # also you can do this.
               inherit (pkgs) nix-doc nil lua-language-server nixd omnisharp-roslyn clang-tools pyright jdt-language-server;
+              inherit (pkgs) metals;
 
               # Wanted this juicy source-generated go to definition, but master is too unstable it seems( Getting weird unrelated errors
               # roslyn-ls = (import ./rolsyn.nix {pkgs = pkgs;});
@@ -160,7 +166,7 @@
                   nvim-lspconfig
                   (mkNvimPlugin roslyn-nvim "roslyn-nvim")
                   (mkNvimPlugin easy-dotnet "easy-dotnet")
-                  (mkNvimPlugin multicursor-nvim "multicursor-nvim")
+                  # (mkNvimPlugin multicursor-nvim "multicursor-nvim")
                   fidget-nvim
                   lualine-lsp-progress
                   lualine-nvim
