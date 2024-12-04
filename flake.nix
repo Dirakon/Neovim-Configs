@@ -167,6 +167,7 @@
                   (mkNvimPlugin roslyn-nvim "roslyn-nvim")
                   (mkNvimPlugin easy-dotnet "easy-dotnet")
                   # (mkNvimPlugin multicursor-nvim "multicursor-nvim")
+                  vim-illuminate
                   fidget-nvim
                   lualine-lsp-progress
                   lualine-nvim
