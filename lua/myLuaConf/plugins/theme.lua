@@ -47,30 +47,29 @@ require("catppuccin").setup({
     },
 })
 
--- setup must be called before loading
--- vim.cmd.colorscheme "catppuccin"
- 
-vim.cmd.colorscheme "retrobox"
-
+local chosen_theme = os.getenv("COLORSCHEME_ENV") or "catppuccin"
+vim.cmd.colorscheme(chosen_theme)
 
 require("transparent").setup({
--- table: default groups
-groups = {
-  'Normal', 'NormalNC', 'Comment', 'Constant', 'Special', 'Identifier',
-  'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String', 'Function',
-  'Conditional', 'Repeat', 'Operator', 'Structure', 'LineNr', 'NonText',
-  'SignColumn', 'CursorLine', 'CursorLineNr', 'StatusLine', 'StatusLineNC',
-  'EndOfBuffer',
-},
--- table: additional groups that should be cleared
-extra_groups = {},
--- table: groups you don't want to clear
-exclude_groups = {},
--- function: code to be executed after highlight groups are cleared
--- Also the user event "TransparentClear" will be triggered
-on_clear = function() end,
+    -- table: default groups
+    groups = {
+      'Normal', 'NormalNC', 'Comment', 'Constant', 'Special', 'Identifier',
+      'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String', 'Function',
+      'Conditional', 'Repeat', 'Operator', 'Structure', 'LineNr', 'NonText',
+      'SignColumn', 'CursorLine', 'CursorLineNr', 'StatusLine', 'StatusLineNC',
+      'EndOfBuffer',
+    },
+    -- table: additional groups that should be cleared
+    extra_groups = {},
+    -- table: groups you don't want to clear
+    exclude_groups = {},
+    -- function: code to be executed after highlight groups are cleared
+    -- Also the user event "TransparentClear" will be triggered
+    on_clear = function() end,
 })
 
 --vim.cmd("TransparentEnable")
+-- For some reason cannot automaticaly toggle it - have to do it once manually.
+-- TODO: figure out how to auto enable it
 
 
