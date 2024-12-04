@@ -151,7 +151,7 @@
                   auto-session
                   neotest
                   neotest-dotnet
-                  camelcasemotion
+                  nvim-spider
                   telescope-fzf-native-nvim
                   telescope-ui-select-nvim
                   telescope-live-grep-args-nvim
@@ -168,6 +168,7 @@
                   (mkNvimPlugin easy-dotnet "easy-dotnet")
                   # (mkNvimPlugin multicursor-nvim "multicursor-nvim")
                   vim-illuminate
+                  langmapper-nvim
                   fidget-nvim
                   lualine-lsp-progress
                   lualine-nvim
