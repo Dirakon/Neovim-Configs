@@ -30,7 +30,7 @@ cmp.setup {
       luasnip.lsp_expand(args.body)
     end,
   },
-  mapping = cmp.mapping.preset.insert {
+  mapping = cmp.mapping {
     ['<C-Space>'] = cmp.mapping.complete {},
     -- Original ctr-enter ('<C-CR>') does not work with tmux in alacrity... wtf... TODO:
     ['<C-y>'] = cmp.mapping.confirm {

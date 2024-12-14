@@ -38,6 +38,17 @@
           "dotnet-sdk-7.0.410"
         ];
       };
+      mkCustomizedLazyGit = (pkgs:
+          let configFile = pkgs.writeText ".lazygit-config" ''
+            git:
+              paging:
+                colorArg: always
+                pager: ${pkgs.delta}/bin/delta --dark --paging=never
+          ''; in
+          pkgs.writeShellScriptBin "lazygit" ''
+                    ${pkgs.lazygit}/bin/lazygit -ucf "${configFile}" "$@"
+          ''
+        );
 
       inherit (forEachSystem (system:
         let
@@ -61,8 +72,7 @@
             pkgs.vimUtils.buildVimPlugin {
               inherit pname src;
               version = src.lastModifiedDate;
-            };
-        in
+            }; in
         {
           # propagatedBuildInputs:
           # this section is for dependencies that should be available
@@ -83,7 +93,7 @@
               universal-ctags
               ripgrep
               fd
-              lazygit
+              (mkCustomizedLazyGit pkgs)
               nodePackages.typescript
             ];
             neonixdev = {
@@ -333,7 +343,7 @@
             exec -a shell ${pkgs.neovide}/bin/neovide --no-fork --neovim-bin "${nixCatsPackage}/bin/${defaultPackageName}" "$@"
           '';
         in
-        let cliUtils = { lazygit = pkgs.lazygit; delta = pkgs.delta; }; in
+        let cliUtils = { lazygit = (mkCustomizedLazyGit pkgs); delta = pkgs.delta; }; in
         let general = { dev = nixCatsPackage; idev = idev; }; in
         let allPackages = general // cliUtils;
         in

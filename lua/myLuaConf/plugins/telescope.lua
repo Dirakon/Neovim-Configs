@@ -26,7 +26,11 @@ require('telescope').setup {
   defaults = {
     mappings = {
       -- Freeze results and start searching inside them
-      i = { ['<c-m>'] = 'to_fuzzy_refine' },
+      i = { 
+        -- wtf - why doesnt it work.... -- TODO!!!
+        -- ['<c-m>'] = 'to_fuzzy_refine',
+        -- ['<enter>'] = 'select_default',
+      },
     },
     prompt_prefix = " ",
     selection_caret = " ",
