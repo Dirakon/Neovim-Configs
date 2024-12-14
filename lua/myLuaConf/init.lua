@@ -3,19 +3,25 @@ require("myLuaConf.LSPs")
 require("myLuaConf.diagnostics")
 
 
-vim.keymap.set('n', '<C-b>', ':b#<CR>', { desc = 'Switch with last [B]uffer' })
+local function save_file()
+	vim.cmd 'w'
+end
+vim.keymap.set({'n'}, '<leader>w', save_file, { desc = '[W]rite file' })
 
-vim.keymap.set('n', '<leader>x', ':bd<CR>', { desc = 'Close buffer' })
-vim.keymap.set('n', '<leader>X', ':bd!<CR>', { desc = 'Force close buffer' })
+local function switch_to_previous_buffer()
+	vim.cmd 'b#'
+end
+vim.keymap.set('n', '<C-b>', switch_to_previous_buffer, { desc = 'Switch with last [B]uffer' })
 
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+local function close_buffer()
+	vim.cmd 'bd'
+end
+vim.keymap.set('n', '<leader>x', close_buffer, { desc = 'Close buffer' })
+
+local function force_close_buffer()
+	vim.cmd 'bd!'
+end
+vim.keymap.set('n', '<leader>X', force_close_buffer, { desc = 'Force close buffer' })
 
 -- Recomended settings for session restore stuff
 vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"

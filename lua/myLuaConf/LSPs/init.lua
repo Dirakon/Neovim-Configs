@@ -49,6 +49,7 @@ end
 -- servers.gopls = {},
 servers.pyright = {} -- python
 servers.metals = {} -- scala
+servers.marksman = {} -- markdown
 -- servers.rust_analyzer = {},
 -- servers.tsserver = {},
 -- servers.html = { filetypes = { 'html', 'twig', 'hbs'} },

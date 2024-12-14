@@ -2,7 +2,7 @@
   description = "NixCats-based NeoVim config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
 
     # neovim-nightly-overlay = {
@@ -89,7 +89,7 @@
             neonixdev = {
               # also you can do this.
               inherit (pkgs) nix-doc nil lua-language-server nixd omnisharp-roslyn clang-tools pyright jdt-language-server;
-              inherit (pkgs) metals;
+              inherit (pkgs) metals marksman;
 
               # Wanted this juicy source-generated go to definition, but master is too unstable it seems( Getting weird unrelated errors
               # roslyn-ls = (import ./rolsyn.nix {pkgs = pkgs;});
@@ -333,7 +333,7 @@
             exec -a shell ${pkgs.neovide}/bin/neovide --no-fork --neovim-bin "${nixCatsPackage}/bin/${defaultPackageName}" "$@"
           '';
         in
-        let cliUtils = { lazygit = pkgs.lazygit; }; in
+        let cliUtils = { lazygit = pkgs.lazygit; delta = pkgs.delta; }; in
         let general = { dev = nixCatsPackage; idev = idev; }; in
         let allPackages = general // cliUtils;
         in
