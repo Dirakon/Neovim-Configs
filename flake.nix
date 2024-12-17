@@ -39,16 +39,18 @@
         ];
       };
       mkCustomizedLazyGit = (pkgs:
-          let configFile = pkgs.writeText ".lazygit-config" ''
+        let
+          configFile = pkgs.writeText ".lazygit-config" ''
             git:
               paging:
                 colorArg: always
                 pager: ${pkgs.delta}/bin/delta --dark --paging=never
-          ''; in
-          pkgs.writeShellScriptBin "lazygit" ''
-                    ${pkgs.lazygit}/bin/lazygit -ucf "${configFile}" "$@"
-          ''
-        );
+          '';
+        in
+        pkgs.writeShellScriptBin "lazygit" ''
+          ${pkgs.lazygit}/bin/lazygit -ucf "${configFile}" "$@"
+        ''
+      );
 
       inherit (forEachSystem (system:
         let
@@ -72,7 +74,8 @@
             pkgs.vimUtils.buildVimPlugin {
               inherit pname src;
               version = src.lastModifiedDate;
-            }; in
+            };
+        in
         {
           # propagatedBuildInputs:
           # this section is for dependencies that should be available
