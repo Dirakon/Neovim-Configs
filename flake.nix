@@ -278,7 +278,7 @@
           };
           # see :help nixCats.flake.outputs.packageDefinitions
           categories = {
-            useVscodeLspOverOmnisharp = false;
+            useVscodeLspOverOmnisharp = true;
             tsPath = "${pkgs.nodePackages.typescript}/bin/tsserver";
             generalBuildInputs = true;
             markdown = true;
