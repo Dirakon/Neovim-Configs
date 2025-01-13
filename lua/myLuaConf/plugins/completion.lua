@@ -42,6 +42,16 @@ cmp.setup {
     ['<S-Tab>'] = cmp.mapping.select_prev_item(),
     ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ['<CS-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-n>'] = cmp.mapping(
+      cmp.mapping.complete({
+        config = {
+          sources = cmp.config.sources({
+            { name = 'cmp_ai' },
+          }),
+        },
+      }),
+      { 'i' }
+    ),
   },
 
   sources = cmp.config.sources {

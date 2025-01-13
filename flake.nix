@@ -143,6 +143,7 @@
                 cmp = with pkgs.vimPlugins; [
                   # cmp stuff
                   nvim-cmp
+                  cmp-ai
                   luasnip
                   friendly-snippets
                   cmp_luasnip
