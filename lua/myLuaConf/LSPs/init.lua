@@ -52,7 +52,7 @@ end
 servers.pyright = {} -- python
 servers.metals = {} -- scala
 servers.marksman = {} -- markdown
--- servers.rust_analyzer = {},
+servers.rust_analyzer = {} -- rust
 -- servers.tsserver = {},
 -- servers.html = { filetypes = { 'html', 'twig', 'hbs'} },
 
