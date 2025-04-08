@@ -3,6 +3,13 @@ require("myLuaConf.LSPs")
 require("myLuaConf.diagnostics")
 
 
+-- Don't want to autocomntinue comments when o/O. Annoying.
+vim.api.nvim_create_autocmd("FileType", {
+	callback = function ()
+		vim.opt_local.formatoptions:remove("o")
+	end
+})
+
 local function save_file()
 	vim.cmd 'w'
 end

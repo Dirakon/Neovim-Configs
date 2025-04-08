@@ -73,6 +73,7 @@
           mkNvimPlugin = src: pname:
             pkgs.vimUtils.buildVimPlugin {
               inherit pname src;
+              doCheck = false;
               version = src.lastModifiedDate;
             };
         in
@@ -108,6 +109,8 @@
               # roslyn-ls = (import ./rolsyn.nix {pkgs = pkgs;});
 
               roslyn-ls = pkgs.roslyn-ls;
+
+              inherit (pkgs) sourcekit-lsp; # Swift
               inherit (pkgs.nodePackages) typescript-language-server bash-language-server vscode-langservers-extracted;
               # nix-doc tags will make your tags much better in nix
               # but only if you have nil as well for some reason

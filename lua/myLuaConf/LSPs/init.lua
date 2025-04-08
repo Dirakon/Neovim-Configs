@@ -40,6 +40,8 @@ servers.ts_ls = { -- ts/js
 
 servers.clangd = {} -- c(++)
 servers.gdscript = {} -- godot, gdscript
+servers.sourcekit = {} -- swift
+
 local pipepath = vim.fn.stdpath("cache") .. "/godot-server.pipe"
 if not vim.loop.fs_stat(pipepath) then
   vim.fn.serverstart(pipepath)
