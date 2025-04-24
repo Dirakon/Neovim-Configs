@@ -99,16 +99,19 @@
               # Wanted this juicy source-generated go to definition, but master is too unstable it seems( Getting weird unrelated errors
               # roslyn-ls = (import ./rolsyn.nix {pkgs = pkgs;});
 
-              roslyn-ls = pkgs.writers.writeBashBin "Microsoft.CodeAnalysis.LanguageServer" 
-              {
+              roslyn-ls = pkgs.writers.writeBashBin "Microsoft.CodeAnalysis.LanguageServer"
+                {
                   makeWrapperArgs = [
-                    "--prefix" "PATH" ":" "${pkgs.lib.makeBinPath [ pkgs.dotnetCorePackages.sdk_9_0 ]}"
+                    "--prefix"
+                    "PATH"
+                    ":"
+                    "${pkgs.lib.makeBinPath [ pkgs.dotnetCorePackages.sdk_9_0 ]}"
                   ];
-              }
-                  ''
-                    # Pass all args
-                    ${pkgs.roslyn-ls}/bin/Microsoft.CodeAnalysis.LanguageServer "$@"
-                  '';
+                }
+                ''
+                  # Pass all args
+                  ${pkgs.roslyn-ls}/bin/Microsoft.CodeAnalysis.LanguageServer "$@"
+                '';
 
               inherit (pkgs) sourcekit-lsp; # Swift
               inherit (pkgs) rust-analyzer;
