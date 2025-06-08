@@ -53,9 +53,11 @@ servers.pyright = {} -- python
 servers.metals = {} -- scala
 servers.marksman = {} -- markdown
 servers.rust_analyzer = {} -- rust
+
 -- servers.tsserver = {},
 -- servers.html = { filetypes = { 'html', 'twig', 'hbs'} },
 
+servers.postgres_lsp = {} -- pgsql
 
 -- if not require('nixCatsUtils').isNixCats and nixCats('lspDebugMode') then
 --   vim.lsp.set_log_level("debug")
