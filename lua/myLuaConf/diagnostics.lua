@@ -39,7 +39,9 @@ local goto_prev_diagnostic = function()
 end
 
 -- Some diagnostic navigation override -> https://github.com/neovim/neovim/discussions/25588
-vim.keymap.set("n", '[d', goto_prev_diagnostic_by_severity, { noremap = true, desc = 'Jump to previous [D]iagnostic (by severity)' })
-vim.keymap.set("n", ']d', goto_next_diagnostic_by_severity, { noremap = true, desc = 'Jump to next [D]iagnostic (by severity)' })
+vim.keymap.set("n", '[d', goto_prev_diagnostic_by_severity,
+	{ noremap = true, desc = 'Jump to previous [D]iagnostic (by severity)' })
+vim.keymap.set("n", ']d', goto_next_diagnostic_by_severity,
+	{ noremap = true, desc = 'Jump to next [D]iagnostic (by severity)' })
 vim.keymap.set("n", '[D', goto_prev_diagnostic, { noremap = true, desc = 'Jump to previous [D]iagnostic (all)' })
 vim.keymap.set("n", ']D', goto_next_diagnostic, { noremap = true, desc = 'Jump to next [D]iagnostic (all)' })

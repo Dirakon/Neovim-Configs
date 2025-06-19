@@ -1,12 +1,12 @@
 local function save_buffer()
 	vim.cmd 'w'
 end
-vim.keymap.set({'n'}, '<leader>w', save_buffer, { desc = '[W]rite (save) buffer' })
+vim.keymap.set({ 'n' }, '<leader>w', save_buffer, { desc = '[W]rite (save) buffer' })
 
 local function save_all_buffers()
 	vim.cmd 'wa'
 end
-vim.keymap.set({'n'}, '<leader>w', save_all_buffers, { desc = '[W]rite (save) all buffers' })
+vim.keymap.set({ 'n' }, '<leader>w', save_all_buffers, { desc = '[W]rite (save) all buffers' })
 
 local function switch_to_previous_buffer()
 	vim.cmd 'b#'
@@ -27,4 +27,3 @@ local function close_other_buffers()
 	vim.cmd 'BufOnly'
 end
 vim.keymap.set('n', '<leader><C-x>', close_other_buffers, { desc = 'Close other buffers' })
-
