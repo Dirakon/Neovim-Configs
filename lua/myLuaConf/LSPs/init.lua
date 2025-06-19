@@ -20,10 +20,17 @@ servers.lua_ls = {
   telemetry = { enabled = false },
   filetypes = { 'lua' },
 }
-servers.nixd = {} -- nix (i think)
-servers.nil_ls = {}  -- nix (i think)
+servers.nixd = {} -- nix but better? https://github.com/helix-editor/helix/pull/10767
+-- servers.nil_ls = {}  -- nix but worse? wtf?
 servers.jdtls = {}  -- java
 servers.jsonls = {}  -- json
+servers.lemminx = {}  -- xml
+servers.marksman = {}  -- markdown
+servers.typos_lsp = { -- all
+  init_options = {
+    diagnosticSeverity = "Hint"
+  }
+}
 servers.ts_ls = { -- ts/js
   cmd = {
     "typescript-language-server",
@@ -35,9 +42,9 @@ servers.ts_ls = { -- ts/js
     },
     hostInfo = "neovim",
   },
-
 }
 
+servers.metals = {} -- scala
 servers.clangd = {} -- c(++)
 servers.gdscript = {} -- godot, gdscript
 servers.sourcekit = {} -- swift
@@ -47,31 +54,9 @@ if not vim.loop.fs_stat(pipepath) then
   vim.fn.serverstart(pipepath)
 end
 
-
--- servers.gopls = {},
 servers.pyright = {} -- python
-servers.metals = {} -- scala
-servers.marksman = {} -- markdown
 servers.rust_analyzer = {} -- rust
-
--- servers.tsserver = {},
--- servers.html = { filetypes = { 'html', 'twig', 'hbs'} },
-
 servers.postgres_lsp = {} -- pgsql
-
--- if not require('nixCatsUtils').isNixCats and nixCats('lspDebugMode') then
---   vim.lsp.set_log_level("debug")
--- end
--- If you were to comment out this autocommand
--- and instead pass the on attach function directly to
--- nvim-lspconfig, it would do the same thing.
---vim.api.nvim_create_autocmd('LspAttach', {
---  group = vim.api.nvim_create_augroup('nixCats-lsp-attach', { clear = true }),
---  callback = function(event)
---    require('myLuaConf.LSPs.caps-on_attach').on_attach(vim.lsp.get_client_by_id(event.data.client_id), event.buf)
---  end
---})
-
 
 if nixCats('useVscodeLspOverOmnisharp') then
   -- roslyn does not use lspconfig yet - https://github.com/neovim/nvim-lspconfig/issues/2657
@@ -87,9 +72,14 @@ if nixCats('useVscodeLspOverOmnisharp') then
   })
 
   require('roslyn').setup {
-    exe = 'Microsoft.CodeAnalysis.LanguageServer',
     --  filewatching = false,
     config = {
+      cmd = {
+        'Microsoft.CodeAnalysis.LanguageServer',
+        "--logLevel=Information",
+        "--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.get_log_path()),
+        "--stdio"
+      },
       on_attach = require('myLuaConf.LSPs.caps-on_attach').on_attach,
       capabilities = capabilities2,
       settings = {
@@ -174,7 +164,6 @@ end
 
 
 
--- if require('nixCatsUtils').isNixCats then
 for server_name, _ in pairs(servers) do
   require('lspconfig')[server_name].setup({
     capabilities = require('myLuaConf.LSPs.caps-on_attach').get_capabilities(),
@@ -187,21 +176,6 @@ for server_name, _ in pairs(servers) do
     root_pattern = (servers[server_name] or {}).root_pattern,
   })
 end
---else
---  require('mason').setup()
---  local mason_lspconfig = require 'mason-lspconfig'
---  mason_lspconfig.setup {
---    ensure_installed = vim.tbl_keys(servers),
---  }
---  mason_lspconfig.setup_handlers {
---    function(server_name)
---      require('lspconfig')[server_name].setup {
---        capabilities = require('myLuaConf.LSPs.caps-on_attach').get_capabilities(),
---        -- this line is interchangeable with the above LspAttach autocommand
---        -- on_attach = require('myLuaConf.LSPs.caps-on_attach').on_attach,
---        settings = servers[server_name],
---        filetypes = (servers[server_name] or {}).filetypes,
---      }
---    end,
---  }
---end
+
+
+require('myLuaConf.LSPs.noneLs')

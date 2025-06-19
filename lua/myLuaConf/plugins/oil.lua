@@ -40,11 +40,12 @@ require("oil").setup({
   -- Note that the cleanup process only starts when none of the oil buffers are currently displayed
   cleanup_delay_ms = 2000,
   lsp_file_methods = {
+    enabled = true,
     -- Time to wait for LSP file operations to complete before skipping
     timeout_ms = 1000,
     -- Set to true to autosave buffers that are updated with LSP willRenameFiles
     -- Set to "unmodified" to only save unmodified buffers
-    autosave_changes = false,
+    autosave_changes = "unmodified",
   },
   -- Constrain the cursor to the editable parts of the oil buffer
   -- Set to `false` to disable, or "name" to keep it on the file names
@@ -181,3 +182,20 @@ require("oil").setup({
     border = "rounded",
   },
 })
+
+-- https://github.com/Penguin-jpg/nvim-config/blob/02d7d49a7aa0fe28aba1dd26702fac166e77ad03/lua/plugins/editor/oil.lua#L41
+vim.api.nvim_create_autocmd("User", {
+      desc = "Close buffers when files are deleted in Oil",
+      pattern = "OilActionsPost",
+      callback = function(args)
+        if args.data.err then return end
+        for _, action in ipairs(args.data.actions) do
+          if action.type == "delete" then
+            local _, path = require("oil.util").parse_url(action.url)
+            local bufnr = vim.fn.bufnr(path)
+            if bufnr ~= -1 then vim.api.nvim_buf_delete(bufnr, { force = true }) end
+          end
+        end
+      end,
+    })
+

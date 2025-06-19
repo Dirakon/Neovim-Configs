@@ -8,14 +8,9 @@
     # neovim-nightly-overlay = {
     #   url = "github:nix-community/neovim-nightly-overlay";
     # };
-
-    easy-dotnet = {
-      url = "github:GustavEikaas/easy-dotnet.nvim";
-      flake = false;
-    };
   };
 
-  outputs = { self, nixpkgs, nixCats, easy-dotnet, ... }@inputs:
+  outputs = { self, nixpkgs, nixCats, ... }@inputs:
     let
       utils = nixCats.utils;
       luaPath = "${./.}";
@@ -35,7 +30,13 @@
             git:
               paging:
                 colorArg: always
-                pager: ${pkgs.delta}/bin/delta --dark --paging=never
+                pager: ${pkgs.delta}/bin/delta -s --dark --paging=never
+            os:
+              edit: 'dev -- {{filename}}'
+              editAtLine: 'dev +{{line}} -- {{filename}}'
+              editAtLineAndWait: 'dev +{{line}} {{filename}}'
+              openDirInEditor: 'dev -- {{dir}}'
+              editInTerminal: true
           '';
         in
         pkgs.writeShellScriptBin "lazygit" ''
@@ -93,12 +94,35 @@
             ];
             neonixdev = {
               # also you can do this.
-              inherit (pkgs) nix-doc nil lua-language-server nixd omnisharp-roslyn clang-tools pyright jdt-language-server;
-              inherit (pkgs) metals marksman;
+              inherit (pkgs) 
+              nix-doc  # nix-??
+          # nil  # nix-ls worse - not using
+          nixd # nix-ls better
+          lua-language-server # lua
+          omnisharp-roslyn  # c# (old)
+          clang-tools # c++
+          pyright # python
+          jdt-language-server # java
+          metals # scala
+          sourcekit-lsp # swift
+          rust-analyzer # rust
+          marksman # markdown
+          typos-lsp # typo finder
+          netcoredbg # c# debugger
+          lemminx # xml
+          typescript-language-server # TS/JS
+          bash-language-server # bash
+          vscode-langservers-extracted # HTML/CSS/JSON/ESLint
+          postgres-lsp # pgsql WITH LIVE DB COMPLETION!
+          ;
 
-              # Wanted this juicy source-generated go to definition, but master is too unstable it seems( Getting weird unrelated errors
-              # roslyn-ls = (import ./rolsyn.nix {pkgs = pkgs;});
+          # Formatters:
+          inherit (pkgs)
+            black # python
+            nixfmt-rfc-style # nix
+          ;
 
+              # c# (new)
               roslyn-ls = pkgs.writers.writeBashBin "Microsoft.CodeAnalysis.LanguageServer"
                 {
                   makeWrapperArgs = [
@@ -112,13 +136,6 @@
                   # Pass all args
                   ${pkgs.roslyn-ls}/bin/Microsoft.CodeAnalysis.LanguageServer "$@"
                 '';
-
-              inherit (pkgs) sourcekit-lsp; # Swift
-              inherit (pkgs) rust-analyzer;
-              inherit (pkgs) postgres-lsp;
-              inherit (pkgs.nodePackages) typescript-language-server bash-language-server vscode-langservers-extracted;
-              # nix-doc tags will make your tags much better in nix
-              # but only if you have nil as well for some reason
             };
           };
 
@@ -169,6 +186,9 @@
                   mini-nvim
                   leap-nvim
                   vim-tmux-navigator
+                  BufOnly-vim
+                  none-ls-nvim
+                  harpoon2
 
                   auto-session
                   neotest
@@ -187,7 +207,7 @@
                   nvim-treesitter.withAllGrammars
                   nvim-lspconfig
                   roslyn-nvim
-                  (mkNvimPlugin easy-dotnet "easy-dotnet")
+                  easy-dotnet-nvim
                   vim-illuminate
                   langmapper-nvim
                   fidget-nvim
