@@ -1,7 +1,7 @@
 local function escape(str)
--- You need to escape these characters to work correctly
-local escape_chars = [[;,."|\]]
-return vim.fn.escape(str, escape_chars)
+  -- You need to escape these characters to work correctly
+  local escape_chars = [[;,."|\]]
+  return vim.fn.escape(str, escape_chars)
 end
 
 -- Recommended to use lua template string

@@ -6,7 +6,7 @@ vim.keymap.set({ 'n' }, '<leader>w', save_buffer, { desc = '[W]rite (save) buffe
 local function save_all_buffers()
 	vim.cmd 'wa'
 end
-vim.keymap.set({ 'n' }, '<leader>w', save_all_buffers, { desc = '[W]rite (save) all buffers' })
+vim.keymap.set({ 'n' }, '<leader>W', save_all_buffers, { desc = '[W]rite (save) all buffers' })
 
 local function switch_to_previous_buffer()
 	vim.cmd 'b#'

@@ -20,12 +20,12 @@ servers.lua_ls = {
   telemetry = { enabled = false },
   filetypes = { 'lua' },
 }
-servers.nixd = {} -- nix but better? https://github.com/helix-editor/helix/pull/10767
+servers.nixd = {}     -- nix but better? https://github.com/helix-editor/helix/pull/10767
 -- servers.nil_ls = {}  -- nix but worse? wtf?
-servers.jdtls = {}  -- java
-servers.jsonls = {}  -- json
+servers.jdtls = {}    -- java
+servers.jsonls = {}   -- json
 servers.lemminx = {}  -- xml
-servers.marksman = {}  -- markdown
+servers.marksman = {} -- markdown
 servers.typos_lsp = { -- all
   init_options = {
     diagnosticSeverity = "Hint"
@@ -44,9 +44,9 @@ servers.ts_ls = { -- ts/js
   },
 }
 
-servers.metals = {} -- scala
-servers.clangd = {} -- c(++)
-servers.gdscript = {} -- godot, gdscript
+servers.metals = {}    -- scala
+servers.clangd = {}    -- c(++)
+servers.gdscript = {}  -- godot, gdscript
 servers.sourcekit = {} -- swift
 
 local pipepath = vim.fn.stdpath("cache") .. "/godot-server.pipe"
@@ -54,9 +54,9 @@ if not vim.loop.fs_stat(pipepath) then
   vim.fn.serverstart(pipepath)
 end
 
-servers.pyright = {} -- python
+servers.pyright = {}       -- python
 servers.rust_analyzer = {} -- rust
-servers.postgres_lsp = {} -- pgsql
+servers.postgres_lsp = {}  -- pgsql
 
 if nixCats('useVscodeLspOverOmnisharp') then
   -- roslyn does not use lspconfig yet - https://github.com/neovim/nvim-lspconfig/issues/2657
@@ -145,16 +145,16 @@ if fss_ls_path ~= nil then
   -- print("FSS_LS_PATH IS set!")
   -- SEE https://ryanisaacg.com/posts/nvim-lspconfig-custom-lsp
   require('lspconfig.configs').fss_ls = {
-      default_config = {
-          cmd = {fss_ls_path},
-          filetypes = {'fss'};
-          root_dir = function(fname)
-              -- print(fname)
-              -- print(find_git_root(fname))
-              return find_git_root(fname)
-          end;
-          settings = {};
-      };
+    default_config = {
+      cmd = { fss_ls_path },
+      filetypes = { 'fss' },
+      root_dir = function(fname)
+        -- print(fname)
+        -- print(find_git_root(fname))
+        return find_git_root(fname)
+      end,
+      settings = {},
+    },
   }
 
   servers.fss_ls = {}

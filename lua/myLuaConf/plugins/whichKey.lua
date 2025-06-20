@@ -1,6 +1,5 @@
-
 require('which-key').setup({
-   preset='helix'
+   preset = 'helix'
 })
 require('which-key').add {
    -- { "<leader><leader>", group = "buffer commands" },
@@ -21,5 +20,4 @@ require('which-key').add {
    --  { "<leader>t_", hidden = true },
    --  { "<leader>w", group = "[w]orkspace" },
    --  { "<leader>w_", hidden = true },
-  }
-
+}

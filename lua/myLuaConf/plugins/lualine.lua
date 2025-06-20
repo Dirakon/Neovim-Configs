@@ -38,7 +38,7 @@ require('lualine').setup({
       'branch'
     },
     lualine_c = {
-      {'filename', path = 1, status = true}, 'diagnostics'
+      { 'filename', path = 1, status = true }, 'diagnostics'
     },
     lualine_x = {
       -- 'encoding', 'fileformat', 'filetype'

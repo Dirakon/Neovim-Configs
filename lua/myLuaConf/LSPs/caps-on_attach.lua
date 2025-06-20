@@ -16,7 +16,7 @@ function M.on_attach(_, bufnr)
       desc = 'LSP: ' .. desc
     end
 
-    vim.keymap.set({'n', 'v', 'x'}, keys, func, { buffer = bufnr, desc = desc })
+    vim.keymap.set({ 'n', 'v', 'x' }, keys, func, { buffer = bufnr, desc = desc })
   end
 
   nvmap('<leader>r', vim.lsp.buf.rename, '[R]ename')

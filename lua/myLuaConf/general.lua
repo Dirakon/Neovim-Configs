@@ -1,6 +1,6 @@
 -- Don't want to autocomntinue comments when o/O. Annoying.
 vim.api.nvim_create_autocmd("FileType", {
-	callback = function ()
+	callback = function()
 		vim.opt_local.formatoptions:remove("o")
 	end
 })
@@ -9,7 +9,7 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format, { desc = '[L]sp [F]ormat' })
 
 -- Recomended settings for session restore stuff
-vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 vim.g.have_nerd_font = true
 

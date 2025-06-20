@@ -1,6 +1,6 @@
 # The following is the overlays/default.nix file.
 # you may copy paste it into a file then include it in your flake.nix
-# to add new overlays you should follow 
+# to add new overlays you should follow
 # the directions inside the comment blocks.
 # it is done this way for convenience but you could do it another way.
 
@@ -17,7 +17,7 @@
 # Example overlay:
 /*
   importName: inputs: let
-  overlay = self: super: { 
+  overlay = self: super: {
   ${importName} = {
       # define your overlay derivations here
   };

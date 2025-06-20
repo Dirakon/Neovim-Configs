@@ -25,7 +25,7 @@ set({ "n", "v" }, "<leader>mP",
 -- 	function() mc.matchSkipCursor(-1) end)
 
 -- Add all matches in the document
-set({ "n"}, "<leader>ma", mc.matchAllAddCursors)
+set({ "n" }, "<leader>ma", mc.matchAllAddCursors)
 
 -- You can also add cursors with any motion you prefer:
 -- set("n", "<right>", function()
