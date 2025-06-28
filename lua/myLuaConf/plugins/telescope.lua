@@ -108,6 +108,12 @@ vim.keymap.set('n', 'gd', builtin.lsp_definitions, { desc = '[G]oto [D]efinition
 vim.keymap.set('n', 'gt', builtin.lsp_type_definitions, { desc = '[G]oto [T]ype definitions' })
 vim.keymap.set('n', 'gi', builtin.lsp_implementations, { desc = '[G]oto [I]mplementation' })
 
+-- Unmap annoying defaults
+vim.keymap.del({ 'n' }, 'grr')
+vim.keymap.del({ 'n' }, 'gra')
+vim.keymap.del({ 'n' }, 'grn')
+vim.keymap.del({ 'n' }, 'gri')
+
 -- TODO general:
 -- buffer navigation (back/next/close)
 -- window navigation (left/right/up/down/close)
@@ -171,3 +177,21 @@ end
 vim.api.nvim_create_user_command('LiveGrepGitRoot', live_grep_git_root, {})
 --vim.keymap.set('n', '<leader>sp', live_grep_git_root, { desc = '[S]earch git [P]roject root' })
 --
+
+
+
+
+
+-- https://github.com/nvim-telescope/telescope.nvim/issues/2160
+-- and 
+-- https://github.com/nvim-telescope/telescope.nvim/issues/2016
+local current_prompt_text = function()
+  for _, bufnr in ipairs(vim.fn.tabpagebuflist()) do
+    if vim.bo[bufnr].filetype == 'TelescopePrompt' then
+      local action_state = require('telescope.actions.state')
+      return action_state.get_current_picker(bufnr):_get_prompt()
+    end
+  end
+  return ''
+end
+-- TODO use it for hot reload with toggling

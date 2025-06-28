@@ -50,29 +50,14 @@
         ''
       );
 
-      inherit
-        (forEachSystem (
-          system:
-          let
-            # see :help nixCats.flake.outputs.overlays
-            dependencyOverlays = (import ./overlays inputs) ++ [
-              # This overlay grabs all the inputs named in the format
-              # `plugins-<pluginName>`
-              # Once we add this overlay to our nixpkgs, we are able to
-              # use `pkgs.neovimPlugins`, which is a set of our plugins.
-              (utils.standardPluginOverlay inputs)
-              # add any flake overlays here.
-            ];
-            # these overlays will be wrapped with ${system}
-            # and we will call the same utils.eachSystem function
-            # later on to access them.
-          in
-          {
-            inherit dependencyOverlays;
-          }
-        ))
-        dependencyOverlays
-        ;
+      dependencyOverlays = (import ./overlays inputs) ++ [
+        # This overlay grabs all the inputs named in the format
+        # `plugins-<pluginName>`
+        # Once we add this overlay to our nixpkgs, we are able to
+        # use `pkgs.neovimPlugins`, which is a set of our plugins.
+        (utils.standardPluginOverlay inputs)
+        # add any flake overlays here.
+      ];
       categoryDefinitions =
         { pkgs
         , settings
@@ -82,11 +67,17 @@
         }@packageDef:
         let
           mkNvimPlugin =
-            src: pname:
+            {
+              src,
+              pname,
+              path ? "",
+              ...
+            }:
             pkgs.vimUtils.buildVimPlugin {
-              inherit pname src;
+              inherit pname;
               doCheck = false;
-              version = src.lastModifiedDate;
+              src = "${src}${path}";
+              version = src.lastModifiedDate or src.lastModified or "19700101";
             };
         in
         {
@@ -113,7 +104,7 @@
               nodePackages.typescript
             ];
             neonixdev = {
-              # also you can do this.
+              # LSPs:
               inherit (pkgs)
                 nix-doc# nix-??
                 # nil  # nix-ls worse - not using
@@ -223,7 +214,7 @@
                   plenary-nvim
                   telescope-nvim
                   omnisharp-extended-lsp-nvim
-                  nvim-dbee # TODO fix for mac
+                  # nvim-dbee # TODO fix for mac
 
                   # treesitter
                   nvim-treesitter-textobjects
@@ -249,6 +240,7 @@
                   nvim-web-devicons
                   oil-nvim
                   lazygit-nvim
+
                 ];
               };
             };
@@ -341,31 +333,10 @@
               lint = true;
               format = true;
               neonixdev = true;
-              test = {
-                subtest1 = true;
-              };
               debug = false;
               # you could also pass something else:
               themer = true;
               colorscheme = "catppuccin";
-              theBestCat = "says meow!!";
-              theWorstCat = {
-                thing'1 = [
-                  "MEOW"
-                  "HISSS"
-                ];
-                thing2 = [
-                  {
-                    thing3 = [
-                      "give"
-                      "treat"
-                    ];
-                  }
-                  "I LOVE KEYBOARDS"
-                ];
-                thing4 = "couch is for scratching";
-              };
-              # see :help nixCats
             };
           };
       };

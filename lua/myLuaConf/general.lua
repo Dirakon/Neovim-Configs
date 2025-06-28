@@ -6,7 +6,9 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- TODO: on save?
-vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format, { desc = '[L]sp [F]ormat' })
+vim.keymap.set('n', '<leader>lf',
+	function() vim.lsp.buf.format({ timeout_ms = 3000, filter = function(client) return client.name ~= "nixd" end }) end,
+	{ desc = '[L]sp [F]ormat' })
 
 -- Recomended settings for session restore stuff
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"

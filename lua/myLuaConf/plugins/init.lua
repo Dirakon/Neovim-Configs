@@ -13,10 +13,4 @@ require('myLuaConf.plugins.mini')
 require('myLuaConf.plugins.leap')
 require('myLuaConf.plugins.dotnet')
 require('myLuaConf.plugins.camelCaseMotions')
--- vim.fn.source('./camelCaseMotions.vim')
 
--- wtf...
--- require('myLuaConf.plugins.multicursor')
-
--- Dont like it
--- require('myLuaConf.plugins.autoSession')
