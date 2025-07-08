@@ -68,5 +68,8 @@ return
     else
       servers.omnisharp = { cmd = { 'OmniSharp' } }
     end
+
+    -- F# is also here!
+    -- wait, it's already enabled by default in vimPlugins.Ionide-vim? 
   end
 }

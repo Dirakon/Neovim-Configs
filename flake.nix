@@ -67,11 +67,10 @@
         }@packageDef:
         let
           mkNvimPlugin =
-            {
-              src,
-              pname,
-              path ? "",
-              ...
+            { src
+            , pname
+            , path ? ""
+            , ...
             }:
             pkgs.vimUtils.buildVimPlugin {
               inherit pname;
@@ -115,6 +114,7 @@
                 pyright# python
                 jdt-language-server# java
                 metals# scala
+                fsautocomplete# f#
                 sourcekit-lsp# swift
                 rust-analyzer# rust
                 marksman# markdown
@@ -222,6 +222,7 @@
                   nvim-lspconfig
                   roslyn-nvim
                   easy-dotnet-nvim
+                  Ionide-vim
                   vim-illuminate
                   langmapper-nvim
                   fidget-nvim
