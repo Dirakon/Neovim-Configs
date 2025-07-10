@@ -31,6 +31,7 @@ servers.typos_lsp = { -- all
     diagnosticSeverity = "Hint"
   }
 }
+servers.ocamllsp = {} -- ocaml!
 servers.ts_ls = { -- ts/js
   cmd = {
     "typescript-language-server",

@@ -115,6 +115,7 @@
                 jdt-language-server# java
                 metals# scala
                 fsautocomplete# f#
+                ocaml# ocaml
                 sourcekit-lsp# swift
                 rust-analyzer# rust
                 marksman# markdown
@@ -126,6 +127,9 @@
                 vscode-langservers-extracted# HTML/CSS/JSON/ESLint
                 postgres-lsp# pgsql WITH LIVE DB COMPLETION!
                 ;
+              ocaml-lsp = pkgs.ocamlPackages.ocaml-lsp; # ocaml 2?
+              ocaml-format = pkgs.ocamlPackages.ocamlformat; # ocaml 3? how many dependencies do you have???
+              ocaml-what = pkgs.dune_3; # ocaml 4? now that's just stupid
 
               # Formatters:
               inherit (pkgs)
