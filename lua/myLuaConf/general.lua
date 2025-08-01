@@ -6,11 +6,21 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- TODO: on save?
+local disableRoslynClient = not nixCats('useCsharpierOverRoslynFormat')
+local filter_fmt = function(client)
+	if client.name == "nixd" then
+		return false
+	end
+	if disableRoslynClient and client.name == "roslyn" then
+		return false
+	end
+	return true
+end
 vim.keymap.set('n', '<leader>lf',
-	function() vim.lsp.buf.format({ timeout_ms = 3000, filter = function(client) return client.name ~= "nixd" end }) end,
+	function() vim.lsp.buf.format({ timeout_ms = 3000, filter = filter_fmt }) end,
 	{ desc = '[L]sp [F]ormat' })
 
--- Recomended settings for session restore stuff
+-- Recommended settings for session restore stuff
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 vim.g.have_nerd_font = true

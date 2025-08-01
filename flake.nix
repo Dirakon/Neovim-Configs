@@ -5,6 +5,9 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
 
+    # Might need to lock roslyn cuz of dotnet versioning idk
+    roslynLock.url = "github:nixos/nixpkgs/nixos-unstable";
+
     # neovim-nightly-overlay = {
     #   url = "github:nix-community/neovim-nightly-overlay";
     # };
@@ -14,6 +17,7 @@
     { self
     , nixpkgs
     , nixCats
+    , roslynLock
     , ...
     }@inputs:
     let
@@ -134,6 +138,7 @@
               # Formatters:
               inherit (pkgs)
                 black# python
+                csharpier# c# cool formatter
                 nixfmt-rfc-style# nix
                 ;
 
@@ -145,15 +150,15 @@
                       "--prefix"
                       "PATH"
                       ":"
-                      "${pkgs.lib.makeBinPath [ pkgs.dotnetCorePackages.sdk_9_0 ]}"
+                      "${pkgs.lib.makeBinPath [ roslynLock.legacyPackages.${pkgs.system}.dotnetCorePackages.sdk_9_0 ]}"
                     ];
                   }
                   ''
                     # Pass all args
-                    ${pkgs.roslyn-ls}/bin/Microsoft.CodeAnalysis.LanguageServer "$@"
+                    ${roslynLock.legacyPackages.${pkgs.system}.roslyn-ls}/bin/Microsoft.CodeAnalysis.LanguageServer "$@"
                   '';
               # dep of easy-dotnet-nvim
-              inherit (pkgs.dotnetCorePackages) sdk_9_0;
+              inherit (roslynLock.legacyPackages.${pkgs.system}.dotnetCorePackages) sdk_9_0;
             };
           };
 
@@ -209,8 +214,9 @@
                   harpoon2
 
                   auto-session
-                  neotest
-                  neotest-dotnet
+                  # broken? see later TODO
+                  # neotest
+                  # neotest-dotnet
                   nvim-spider
                   telescope-fzf-native-nvim
                   telescope-ui-select-nvim
@@ -224,7 +230,6 @@
                   nvim-treesitter-textobjects
                   nvim-treesitter.withAllGrammars
                   nvim-lspconfig
-                  roslyn-nvim
                   easy-dotnet-nvim
                   Ionide-vim
                   vim-illuminate
@@ -246,6 +251,9 @@
                   oil-nvim
                   lazygit-nvim
 
+                ] ++
+                [
+                  roslynLock.legacyPackages.${pkgs.system}.vimPlugins.roslyn-nvim
                 ];
               };
             };
@@ -329,6 +337,7 @@
             # see :help nixCats.flake.outputs.packageDefinitions
             categories = {
               useVscodeLspOverOmnisharp = true;
+              useCsharpierOverRoslynFormat = true;
               tsPath = "${pkgs.nodePackages.typescript}/bin/tsserver";
               generalBuildInputs = true;
               markdown = true;
