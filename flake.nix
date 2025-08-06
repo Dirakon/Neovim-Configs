@@ -8,6 +8,9 @@
     # Might need to lock roslyn cuz of dotnet versioning idk
     roslynLock.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    # Other versions have some python problems, will look in future
+    postingLock.url = "github:nixos/nixpkgs/3016b4b15d13f3089db8a41ef937b13a9e33a8df";
+
     # neovim-nightly-overlay = {
     #   url = "github:nix-community/neovim-nightly-overlay";
     # };
@@ -18,6 +21,7 @@
     , nixpkgs
     , nixCats
     , roslynLock
+    , postingLock
     , ...
     }@inputs:
     let
@@ -401,6 +405,7 @@
         let
           cliUtils = {
             lazygit = (mkCustomizedLazyGit pkgs);
+            posting = (postingLock.legacyPackages.${pkgs.system}.posting);
             delta = pkgs.delta;
           };
         in
