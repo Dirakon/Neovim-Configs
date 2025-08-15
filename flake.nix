@@ -168,12 +168,6 @@
 
           # This is for plugins that will load at startup without using packadd:
           startupPlugins = {
-            debug = with pkgs.vimPlugins; [
-              nvim-nio
-              nvim-dap
-              nvim-dap-ui
-              nvim-dap-virtual-text
-            ];
             lint = with pkgs.vimPlugins; [
               nvim-lint
             ];
@@ -216,6 +210,12 @@
                   BufOnly-vim
                   none-ls-nvim
                   harpoon2
+
+                  # Debug
+                  nvim-nio
+                  nvim-dap
+                  nvim-dap-ui
+                  nvim-dap-virtual-text
 
                   auto-session
                   # broken? see later TODO
