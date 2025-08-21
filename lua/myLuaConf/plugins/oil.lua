@@ -1,4 +1,8 @@
-vim.keymap.set('n', '-', ':Oil<CR>', { desc = 'up to directory level' })
+local function oil()
+  vim.cmd 'Oil'
+end
+
+vim.keymap.set('n', '-', oil, { desc = 'up to directory level' })
 
 require("oil").setup({
   -- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)

@@ -1,4 +1,5 @@
 require('myLuaConf.plugins.tresitter')
+require('myLuaConf.plugins.neotree')
 require('myLuaConf.plugins.telescope')
 require('myLuaConf.plugins.theme')
 require('myLuaConf.plugins.whichKey')

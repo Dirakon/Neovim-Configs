@@ -249,6 +249,7 @@
                   vim-rhubarb
                   vim-repeat
                   undotree
+                  nvim-tree-lua
                   nvim-surround
                   indent-blankline-nvim
                   nvim-web-devicons
