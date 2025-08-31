@@ -6,7 +6,7 @@
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
 
     # Might need to lock roslyn cuz of dotnet versioning idk
-    roslynLock.url = "github:nixos/nixpkgs/nixos-unstable";
+    roslynLock.url = "github:nixos/nixpkgs/94def634a20494ee057c76998843c015909d6311";
 
     # Other versions have some python problems, will look in future
     postingLock.url = "github:nixos/nixpkgs/3016b4b15d13f3089db8a41ef937b13a9e33a8df";
