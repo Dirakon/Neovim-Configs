@@ -110,6 +110,7 @@ vim.keymap.set('n', 'gi', builtin.lsp_implementations, { desc = '[G]oto [I]mplem
 
 -- Unmap annoying defaults
 vim.keymap.del({ 'n' }, 'grr')
+vim.keymap.del({ 'n' }, 'grt')
 vim.keymap.del({ 'n' }, 'gra')
 vim.keymap.del({ 'n' }, 'grn')
 vim.keymap.del({ 'n' }, 'gri')
