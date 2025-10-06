@@ -206,7 +206,6 @@
                   transparent-nvim
                   mini-nvim
                   leap-nvim
-                  vim-tmux-navigator
                   BufOnly-vim
                   none-ls-nvim
                   harpoon2
