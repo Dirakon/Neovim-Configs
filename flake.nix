@@ -134,6 +134,7 @@
                 bash-language-server# bash
                 vscode-langservers-extracted# HTML/CSS/JSON/ESLint
                 postgres-lsp# pgsql WITH LIVE DB COMPLETION!
+                gopls# go
                 ;
               ocaml-lsp = pkgs.ocamlPackages.ocaml-lsp; # ocaml 2?
               ocaml-format = pkgs.ocamlPackages.ocamlformat; # ocaml 3? how many dependencies do you have???

@@ -48,6 +48,7 @@ servers.ts_ls = { -- ts/js
 servers.metals = {}    -- scala
 servers.clangd = {}    -- c(++)
 servers.gdscript = {}  -- godot, gdscript
+servers.gopls = {}  -- go
 servers.sourcekit = {} -- swift
 
 local pipepath = vim.fn.stdpath("cache") .. "/godot-server.pipe"
