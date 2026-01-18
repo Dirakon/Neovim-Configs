@@ -25,7 +25,7 @@ return
       -- SEE https://ryanisaacg.com/posts/nvim-lspconfig-custom-lsp
       require('lspconfig.configs').fss_ls = {
         default_config = {
-          cmd = { fss_ls_path },
+          cmd = { fss_ls_path, 'lsp' },
           filetypes = { 'fss' },
           root_dir = function(fname)
             -- print(fname)
