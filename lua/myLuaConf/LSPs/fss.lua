@@ -14,31 +14,33 @@ local function find_git_root(fname)
   return git_root
 end
 
+local function add_fss(servers)
+  local fss_path = os.getenv("FSS_PATH")
+  if fss_path ~= nil then
+    require('fss').setup({ fss_bin = fss_path })
+    vim.cmd([[autocmd BufRead,BufNewFile *.fss setfiletype fss]])
+    -- SEE https://ryanisaacg.com/posts/nvim-lspconfig-custom-lsp
+    require('lspconfig.configs').fss_ls = {
+      default_config = {
+        cmd = { fss_path, 'lsp' },
+        filetypes = { 'fss' },
+        root_dir = function(fname)
+          -- print(fname)
+          -- print(find_git_root(fname))
+          return find_git_root(fname)
+        end,
+        settings = {},
+      },
+    }
+
+    servers.fss_ls = {}
+  else
+    -- print("FSS_LS_PATH not set!")
+  end
+end
+
 
 return
 {
-  add_fss = function(servers)
-    local fss_ls_path = os.getenv("FSS_LS_PATH")
-    if fss_ls_path ~= nil then
-      vim.cmd([[autocmd BufRead,BufNewFile *.fss setfiletype fss]])
-      -- print("FSS_LS_PATH IS set!")
-      -- SEE https://ryanisaacg.com/posts/nvim-lspconfig-custom-lsp
-      require('lspconfig.configs').fss_ls = {
-        default_config = {
-          cmd = { fss_ls_path, 'lsp' },
-          filetypes = { 'fss' },
-          root_dir = function(fname)
-            -- print(fname)
-            -- print(find_git_root(fname))
-            return find_git_root(fname)
-          end,
-          settings = {},
-        },
-      }
-
-      servers.fss_ls = {}
-    else
-      -- print("FSS_LS_PATH not set!")
-    end
-  end
+  add_fss = add_fss
 }

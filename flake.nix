@@ -5,6 +5,12 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
 
+    fss = {
+      url = "git+file:fss";
+      flake = false;
+    };
+
+
     # Might need to lock roslyn cuz of dotnet versioning idk
     roslynLock.url = "github:nixos/nixpkgs/94def634a20494ee057c76998843c015909d6311";
 
@@ -210,6 +216,7 @@
                   BufOnly-vim
                   none-ls-nvim
                   harpoon2
+                  (mkNvimPlugin {src = inputs.fss; pname = "fss.nvim";})
 
                   # Debug
                   nvim-nio

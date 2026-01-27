@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "fss": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1769709682,
+        "narHash": "sha256-yubP4Qn0Q+8tAM4xZf15wsOk5vPR1is80/9iECr2Fps=",
+        "ref": "refs/heads/main",
+        "rev": "5bc3630e0a362e182b52e473316204888a76c9a5",
+        "revCount": 4,
+        "type": "git",
+        "url": "file:fss"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:fss"
+      }
+    },
     "nixCats": {
       "locked": {
         "lastModified": 1756502529,
@@ -49,6 +65,7 @@
     },
     "root": {
       "inputs": {
+        "fss": "fss",
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
         "postingLock": "postingLock",
