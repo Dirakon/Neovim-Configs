@@ -3,11 +3,11 @@
     "fss": {
       "flake": false,
       "locked": {
-        "lastModified": 1769709682,
-        "narHash": "sha256-yubP4Qn0Q+8tAM4xZf15wsOk5vPR1is80/9iECr2Fps=",
+        "lastModified": 1769728949,
+        "narHash": "sha256-ZiKyxSCATPcyDS63FHZS0uYwHeRDVzaz58wo8Jhq5DY=",
         "ref": "refs/heads/main",
-        "rev": "5bc3630e0a362e182b52e473316204888a76c9a5",
-        "revCount": 4,
+        "rev": "7b1bc438360be1cf2c3eae5b43c0ca41a5e5249c",
+        "revCount": 5,
         "type": "git",
         "url": "file:fss"
       },

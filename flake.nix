@@ -216,7 +216,7 @@
                   BufOnly-vim
                   none-ls-nvim
                   harpoon2
-                  (mkNvimPlugin {src = inputs.fss; pname = "fss.nvim";})
+                  (mkNvimPlugin { src = inputs.fss; pname = "fss.nvim"; })
 
                   # Debug
                   nvim-nio

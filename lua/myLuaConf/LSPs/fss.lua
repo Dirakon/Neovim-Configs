@@ -14,7 +14,9 @@ local function find_git_root(fname)
   return git_root
 end
 
-local function add_fss(servers)
+local M = {}
+
+function M.add_fss(servers)
   local fss_path = os.getenv("FSS_PATH")
   if fss_path ~= nil then
     require('fss').setup({ fss_bin = fss_path })
@@ -39,8 +41,4 @@ local function add_fss(servers)
   end
 end
 
-
-return
-{
-  add_fss = add_fss
-}
+return M
