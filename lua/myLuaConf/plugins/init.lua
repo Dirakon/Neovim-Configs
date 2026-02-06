@@ -13,6 +13,7 @@ require('myLuaConf.plugins.git')
 require('myLuaConf.plugins.debug')
 require('myLuaConf.plugins.mini')
 require('myLuaConf.plugins.leap')
+require('myLuaConf.plugins.macros')
 require('myLuaConf.plugins.dotnet')
 require('myLuaConf.plugins.camelCaseMotions')
 

@@ -217,6 +217,7 @@
                   none-ls-nvim
                   harpoon2
                   (mkNvimPlugin { src = inputs.fss; pname = "fss.nvim"; })
+                  faster-nvim
 
                   # Debug
                   nvim-nio

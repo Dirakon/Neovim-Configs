@@ -80,6 +80,12 @@ vim.opt.scrolloff = 10
 vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Copy relative path of current file to clipboard
+vim.keymap.set('n', '<leader><S-B>', function()
+    local path = require('plenary').path:new(vim.api.nvim_buf_get_name(0)):make_relative()
+    vim.fn.setreg("+", path)
+    vim.notify('Copied "' .. path .. '" to the clipboard!')
+end, { desc = 'Copy relative path' })
 
 -- Neovide
 if vim.g.neovide then
