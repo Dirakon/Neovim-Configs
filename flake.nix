@@ -48,9 +48,8 @@
         let
           configFile = pkgs.writeText ".lazygit-config" ''
             git:
-              paging:
-                colorArg: always
-                pager: ${pkgs.delta}/bin/delta -s --dark --paging=never
+              pagers:
+                - pager: ${pkgs.delta}/bin/delta -s --dark --paging=never
             os:
               edit: 'dev -- {{filename}}'
               editAtLine: 'dev +{{line}} -- {{filename}}'
