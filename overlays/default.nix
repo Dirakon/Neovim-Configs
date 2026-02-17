@@ -34,7 +34,22 @@ let
     # the name here will be the name used when importing items from it in your flake.
     # i.e. these items will be accessed as pkgs.nixCatsBuilds.thenameofthepackage
     # nixCatsBuilds = import ./customBuildsOverlay.nix;
-
+    nixCatsBuilds = prev: next:
+      let
+        roslyn-nixpkgs = import
+          (prev.fetchFromGitHub {
+            owner = "NixOS";
+            repo = "nixpkgs";
+            rev = "94def634a20494ee057c76998843c015909d6311";
+            sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+          })
+          { system = prev.system; };
+      in
+    {
+        roslyn-ls = roslyn-nixpkgs.roslyn-ls;
+        dotnetCorePackages.sdk_9_0 = roslyn-nixpkgs.dotnetCorePackages.sdk_9_0;
+        vimPlugins.roslyn-nvim = roslyn-nixpkgs.vimPlugins.roslyn-nvim;
+    };
   };
 in
 builtins.attrValues (builtins.mapAttrs (name: value: (value name inputs)) overlaySet)
