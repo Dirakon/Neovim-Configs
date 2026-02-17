@@ -265,7 +265,7 @@
 
                 ] ++
                 [
-                  roslynLock.legacyPackages.${pkgs.system}.vimPlugins.roslyn-nvim
+                  pkgs.vimPlugins.roslyn-nvim
                 ];
               };
             };
