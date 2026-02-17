@@ -10,6 +10,10 @@
       flake = false;
     };
 
+
+    # Might need to lock roslyn cuz of dotnet versioning idk
+    roslynLock.url = "github:nixos/nixpkgs/94def634a20494ee057c76998843c015909d6311";
+
     # Other versions have some python problems, will look in future
     postingLock.url = "github:nixos/nixpkgs/3016b4b15d13f3089db8a41ef937b13a9e33a8df";
 
@@ -22,6 +26,7 @@
     { self
     , nixpkgs
     , nixCats
+    , roslynLock
     , postingLock
     , ...
     }@inputs:
@@ -156,15 +161,15 @@
                       "--prefix"
                       "PATH"
                       ":"
-                      "${pkgs.lib.makeBinPath [ pkgs.dotnetCorePackages.sdk_9_0 ]}"
+                      "${pkgs.lib.makeBinPath [ roslynLock.legacyPackages.${pkgs.system}.dotnetCorePackages.sdk_9_0 ]}"
                     ];
                   }
                   ''
                     # Pass all args
-                    ${pkgs.roslyn-ls}/bin/Microsoft.CodeAnalysis.LanguageServer "$@"
+                    ${roslynLock.legacyPackages.${pkgs.system}.roslyn-ls}/bin/Microsoft.CodeAnalysis.LanguageServer "$@"
                   '';
               # dep of easy-dotnet-nvim
-              inherit (pkgs.dotnetCorePackages) sdk_9_0;
+              inherit (roslynLock.legacyPackages.${pkgs.system}.dotnetCorePackages) sdk_9_0;
             };
           };
 
@@ -261,7 +266,7 @@
 
                 ] ++
                 [
-                  pkgs.roslyn-nvim
+                  roslynLock.legacyPackages.${pkgs.system}.vimPlugins.roslyn-nvim
                 ];
               };
             };
