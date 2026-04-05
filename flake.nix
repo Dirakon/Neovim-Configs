@@ -138,7 +138,7 @@
                 typescript-language-server# TS/JS
                 bash-language-server# bash
                 vscode-langservers-extracted# HTML/CSS/JSON/ESLint
-                postgres-lsp# pgsql WITH LIVE DB COMPLETION!
+                postgres-language-server# pgsql WITH LIVE DB COMPLETION!
                 gopls# go
                 ;
               ocaml-lsp = pkgs.ocamlPackages.ocaml-lsp; # ocaml 2?
@@ -149,7 +149,7 @@
               inherit (pkgs)
                 black# python
                 csharpier# c# cool formatter
-                nixfmt-rfc-style# nix
+                nixfmt# nix
                 ;
 
               # c# (new)
@@ -160,15 +160,15 @@
                       "--prefix"
                       "PATH"
                       ":"
-                      "${pkgs.lib.makeBinPath [ roslynLock.legacyPackages.${pkgs.system}.dotnetCorePackages.sdk_9_0 ]}"
+                      "${pkgs.lib.makeBinPath [ roslynLock.legacyPackages.${pkgs.stdenv.hostPlatform.system}.dotnetCorePackages.sdk_9_0 ]}"
                     ];
                   }
                   ''
                     # Pass all args
-                    ${roslynLock.legacyPackages.${pkgs.system}.roslyn-ls}/bin/Microsoft.CodeAnalysis.LanguageServer "$@"
+                    ${roslynLock.legacyPackages.${pkgs.stdenv.hostPlatform.system}.roslyn-ls}/bin/Microsoft.CodeAnalysis.LanguageServer "$@"
                   '';
               # dep of easy-dotnet-nvim
-              inherit (roslynLock.legacyPackages.${pkgs.system}.dotnetCorePackages) sdk_9_0;
+              inherit (roslynLock.legacyPackages.${pkgs.stdenv.hostPlatform.system}.dotnetCorePackages) sdk_9_0;
             };
           };
 
@@ -344,7 +344,7 @@
               aliases = [ ];
               # caution: this option must be the same for all packages.
               # or at least, all packages that are to be installed simultaneously.
-              # neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.neovim;
+              # neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.neovim;
             };
             # see :help nixCats.flake.outputs.packageDefinitions
             categories = {
@@ -413,7 +413,7 @@
         let
           cliUtils = {
             lazygit = (mkCustomizedLazyGit pkgs);
-            posting = (postingLock.legacyPackages.${pkgs.system}.posting);
+            posting = (postingLock.legacyPackages.${pkgs.stdenv.hostPlatform.system}.posting);
             delta = pkgs.delta;
           };
         in
