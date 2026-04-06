@@ -11,7 +11,7 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = '*',
   callback = function()
     pcall(function()
-      vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      vim.bo.indentexpr = "nvim_treesitter#indent()"
     end)
   end,
 })
