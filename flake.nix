@@ -126,6 +126,7 @@
                 pyright# python
                 jdt-language-server# java
                 metals# scala
+                coursier# scala also
                 fsautocomplete# f#
                 ocaml# ocaml
                 sourcekit-lsp# swift
@@ -261,7 +262,7 @@
                   nvim-web-devicons
                   oil-nvim
                   lazygit-nvim
-
+                  nvim-metals
                 ] ++
                 [
                   pkgs.vimPlugins.roslyn-nvim

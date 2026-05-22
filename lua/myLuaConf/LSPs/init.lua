@@ -62,7 +62,20 @@ vim.lsp.config('postgres_lsp', {
 })
 vim.lsp.enable('postgres_lsp')
 
-vim.lsp.enable('metals')
+
+local metals_config = require("metals").bare_config()
+metals_config.settings = {
+  -- useGlobalExecutable = true,
+}
+metals_config.on_attach = require('myLuaConf.LSPs.caps-on_attach').on_attach
+local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "scala", "sbt", "java" },
+  callback = function()
+    require("metals").initialize_or_attach(metals_config)
+  end,
+  group = nvim_metals_group,
+})
 
 -- 5. Godot pipe (unchanged)
 local pipepath = vim.fn.stdpath("cache") .. "/godot-server.pipe"
