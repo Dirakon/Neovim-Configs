@@ -62,8 +62,7 @@ vim.lsp.config('postgres_lsp', {
 })
 vim.lsp.enable('postgres_lsp')
 
--- 4. Metals: use nvim-metals plugin instead of lspconfig
--- (follow nvim-metals docs for 0.11+)
+vim.lsp.enable('metals')
 
 -- 5. Godot pipe (unchanged)
 local pipepath = vim.fn.stdpath("cache") .. "/godot-server.pipe"
