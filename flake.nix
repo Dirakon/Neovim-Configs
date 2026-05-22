@@ -62,27 +62,6 @@
           ${pkgs.lazygit}/bin/lazygit -ucf "${configFile}" "$@"
         ''
       );
-      mk-easy-dotnet-server = (pkgs : pkgs.buildDotnetModule rec {
-      pname = "easy-dotnet-server";
-      name = pname;
-      # version = "1.0.1";
-
-      src = pkgs.fetchFromGitHub {
-        owner = "GustavEikaas";
-        repo = pname;
-        rev = "fb9f2da82cfe8c89c7bed81de7bbcf313104b3bb";
-        sha256 = "sha256-fRcGkw1lNPHs6uKG71l9FCXjiYkEQIzZmv3GwMjc/YU=";
-      };
-
-      nugetDeps = ./easy-dotnet-deps.json;
-      projectFile = "EasyDotnet.sln";
-
-      meta = {
-        description = "Simple and easy .NET server";
-        homepage = "https://github.com/GustavEikaas/easy-dotnet-server";
-      };
-      });
-
       dependencyOverlays = (import ./overlays inputs) ++ [
         # This overlay grabs all the inputs named in the format
         # `plugins-<pluginName>`
@@ -189,8 +168,6 @@
                   '';
               # dep of easy-dotnet-nvim
               inherit (roslynLock.legacyPackages.${pkgs.stdenv.hostPlatform.system}.dotnetCorePackages) sdk_9_0;
-
-              easy-dotnet-server = mk-easy-dotnet-server pkgs;
             };
           };
 
