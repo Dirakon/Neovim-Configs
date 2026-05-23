@@ -160,15 +160,15 @@
                       "--prefix"
                       "PATH"
                       ":"
-                      "${pkgs.lib.makeBinPath [ roslynLock.legacyPackages.${pkgs.stdenv.hostPlatform.system}.dotnetCorePackages.sdk_9_0 ]}"
+                      "${pkgs.lib.makeBinPath [ pkgs.dotnetCorePackages.sdk_9_0 ]}"
                     ];
                   }
                   ''
                     # Pass all args
-                    ${roslynLock.legacyPackages.${pkgs.stdenv.hostPlatform.system}.roslyn-ls}/bin/Microsoft.CodeAnalysis.LanguageServer "$@"
+                    ${pkgs.roslyn-ls}/bin/Microsoft.CodeAnalysis.LanguageServer "$@"
                   '';
               # dep of easy-dotnet-nvim
-              inherit (roslynLock.legacyPackages.${pkgs.stdenv.hostPlatform.system}.dotnetCorePackages) sdk_9_0;
+              inherit (pkgs.dotnetCorePackages) sdk_9_0;
             };
           };
 
