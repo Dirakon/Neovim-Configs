@@ -43,6 +43,15 @@ require('telescope').setup {
       prompt_position = "bottom",
       height = 0.95,
     },
+    vimgrep_arguments = {
+      'rg',
+      '--hidden', -- SHOW HIDDEN, RESPECT GITIGNORE!!!
+      '--no-heading',
+      '--with-filename',
+      '--line-number',
+      '--column',
+      '--smart-case'
+    },
   },
   -- pickers = {}
   extensions = {
@@ -61,7 +70,12 @@ pcall(require('telescope').load_extension, 'live_grep_args')
 local builtin = require 'telescope.builtin'
 -- vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
 -- vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-vim.keymap.set('n', '<leader>f', builtin.find_files, { desc = 'Select [F]ile' })
+
+local function find_files()
+  builtin.find_files({ hidden = true })
+end
+
+vim.keymap.set('n', '<leader>f', find_files, { desc = 'Select [F]ile' })
 -- vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
 -- vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
 
@@ -188,7 +202,7 @@ vim.api.nvim_create_user_command('LiveGrepGitRoot', live_grep_git_root, {})
 
 
 -- https://github.com/nvim-telescope/telescope.nvim/issues/2160
--- and 
+-- and
 -- https://github.com/nvim-telescope/telescope.nvim/issues/2016
 local current_prompt_text = function()
   for _, bufnr in ipairs(vim.fn.tabpagebuflist()) do
