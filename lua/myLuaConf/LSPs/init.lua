@@ -1,10 +1,8 @@
--- 1. Global defaults
 vim.lsp.config('*', {
   capabilities = require('myLuaConf.LSPs.caps-on_attach').get_capabilities(),
   on_attach = require('myLuaConf.LSPs.caps-on_attach').on_attach,
 })
 
--- 2. Simple servers (defaults from nvim-lspconfig)
 local simple_servers = {
   'bashls',
   'clangd',
@@ -26,7 +24,6 @@ for _, name in ipairs(simple_servers) do
   vim.lsp.enable(name)
 end
 
--- 3. Servers you need to configure
 vim.lsp.config('lua_ls', {
   settings = {
     Lua = {
@@ -70,16 +67,19 @@ metals_config.settings = {
 metals_config.on_attach = require('myLuaConf.LSPs.caps-on_attach').on_attach
 local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "scala", "sbt", "java" },
+  pattern = { "scala", "sbt" },
   callback = function()
     require("metals").initialize_or_attach(metals_config)
   end,
   group = nvim_metals_group,
 })
 
--- 5. Godot pipe (unchanged)
 local pipepath = vim.fn.stdpath("cache") .. "/godot-server.pipe"
-if not vim.loop.fs_stat(pipepath) then
+if vim.loop.fs_stat("project.godot") then
+  -- Delete existing pipe file if it exists
+  if vim.loop.fs_stat(pipepath) then
+    vim.fn.delete(pipepath)
+  end
   vim.fn.serverstart(pipepath)
 end
 
