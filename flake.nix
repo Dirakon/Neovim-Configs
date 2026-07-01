@@ -43,6 +43,20 @@
           "dotnet-sdk-7.0.410"
         ];
       };
+      mk-roslyn-ls = pkgs: net-pkg:
+        pkgs.writers.writeBashBin "Microsoft.CodeAnalysis.LanguageServer"
+          {
+            makeWrapperArgs = [
+              "--prefix"
+              "PATH"
+              ":"
+              "${pkgs.lib.makeBinPath [ net-pkg ]}"
+            ];
+          }
+          ''
+            # Pass all args
+            ${pkgs.roslyn-ls}/bin/Microsoft.CodeAnalysis.LanguageServer "$@"
+          '';
       mkCustomizedLazyGit = (
         pkgs:
         let
@@ -153,22 +167,8 @@
                 ;
 
               # c# (new)
-              roslyn-ls =
-                pkgs.writers.writeBashBin "Microsoft.CodeAnalysis.LanguageServer"
-                  {
-                    makeWrapperArgs = [
-                      "--prefix"
-                      "PATH"
-                      ":"
-                      "${pkgs.lib.makeBinPath [ pkgs.dotnetCorePackages.sdk_9_0 ]}"
-                    ];
-                  }
-                  ''
-                    # Pass all args
-                    ${pkgs.roslyn-ls}/bin/Microsoft.CodeAnalysis.LanguageServer "$@"
-                  '';
               # dep of easy-dotnet-nvim
-              inherit (pkgs.dotnetCorePackages) sdk_9_0;
+              inherit (pkgs.dotnetCorePackages) sdk_10_0;
             };
           };
 
@@ -350,6 +350,8 @@
             categories = {
               useVscodeLspOverOmnisharp = true;
               useCsharpierOverRoslynFormat = true;
+              net9RoslynPath = "${mk-roslyn-ls pkgs pkgs.dotnetCorePackages.sdk_9_0}/bin/Microsoft.CodeAnalysis.LanguageServer";
+              net10RoslynPath = "${mk-roslyn-ls pkgs pkgs.dotnetCorePackages.sdk_10_0}/bin/Microsoft.CodeAnalysis.LanguageServer";
               tsPath = "${pkgs.typescript}/bin/tsserver";
               generalBuildInputs = true;
               markdown = true;
