@@ -104,7 +104,27 @@ function M.live_grep_exact(opts)
 end
 
 -------------------------------------------------------------------
+-- live_grep with --multiline (regex mode, no --fixed-strings)
+-------------------------------------------------------------------
+function M.live_grep_multiline(opts)
+  opts = opts or {}
+
+  local args = toggles.build_vimgrep_args()
+  table.insert(args, '--multiline')
+
+  builtin.live_grep(vim.tbl_extend("force", opts, {
+    vimgrep_arguments = args,
+    prompt_title = "Live Grep (multiline)" .. toggles.status_line(),
+    attach_mappings = function(_, map)
+      return attach_file_toggles(map, M.live_grep_multiline, opts)
+    end,
+  }))
+end
+
+-------------------------------------------------------------------
 -- Grep visual selection with exact match + toggles
+-- Handles multiline selections by converting newlines to \n escape
+-- sequences and passing --multiline to ripgrep.
 -------------------------------------------------------------------
 function M.grep_visual_selection(opts)
   -- Save and restore register
@@ -115,9 +135,68 @@ function M.grep_visual_selection(opts)
   vim.fn.setreg('z', saved_reg, saved_regtype)
 
   opts = opts or {}
-  opts.default_text = selection
 
-  M.live_grep_exact(opts)
+  if selection:find('\n') then
+    -- For multiline searches we need --multiline and cannot use
+    -- --fixed-strings (it's incompatible with \n matching across lines
+    -- in ripgrep). Escape regex special chars instead.
+    -- Escape backslashes first, then other special chars, then convert
+    -- newlines to \n so telescope's single-line prompt buffer can display them.
+    selection = selection:gsub('\\', '\\\\')
+    selection = selection:gsub('([%(%)%.%%%+%-%*%?%[%]%^%$%{%}%|])', '\\%1')
+    selection = selection:gsub('\n', '\\n')
+    -- Trim trailing \n from the visual selection (trailing newline artifact)
+    selection = selection:gsub('\\n$', '')
+
+    opts.default_text = selection
+    M.live_grep_multiline(opts)
+  else
+    opts.default_text = selection
+    M.live_grep_exact(opts)
+  end
+end
+
+-------------------------------------------------------------------
+-- Paste from clipboard into a telescope prompt, handling multiline text
+-------------------------------------------------------------------
+function M.paste_into_prompt()
+  local text = vim.fn.getreg('+')
+  if text == '' then return end
+
+  local is_multiline = text:find('\n') ~= nil
+  if not is_multiline then
+    -- Single-line: just set the prompt text
+    local action_state = require('telescope.actions.state')
+    local picker = action_state.get_current_picker(vim.api.nvim_get_current_buf())
+    local current = picker:_get_prompt()
+    picker:set_prompt(current .. text, false)
+    return
+  end
+
+  -- Multiline paste — check if we should upgrade live_grep_exact to
+  -- live_grep_multiline (only when the prompt is empty/whitespace)
+  local action_state = require('telescope.actions.state')
+  local prompt_bufnr = vim.api.nvim_get_current_buf()
+  local picker = action_state.get_current_picker(prompt_bufnr)
+  local current_prompt = picker:_get_prompt()
+
+  if current_prompt:match('^%s*$') and picker.prompt_title:find('^Live Grep %(exact%)') then
+    -- Prompt is empty and we're in live_grep_exact: upgrade to multiline
+    actions.close(prompt_bufnr)
+
+    -- Escape for regex mode (same as grep_visual_selection)
+    local escaped = text:gsub('\\', '\\\\')
+    escaped = escaped:gsub('([%(%)%.%%%+%-%*%?%[%]%^%$%{%}%|])', '\\%1')
+    escaped = escaped:gsub('\n', '\\n')
+    escaped = escaped:gsub('\\n$', '')
+
+    M.live_grep_multiline({ default_text = escaped })
+  else
+    -- Just convert newlines and paste into current prompt
+    local converted = text:gsub('\n', '\\n')
+    converted = converted:gsub('\\n$', '')
+    picker:set_prompt(current_prompt .. converted, false)
+  end
 end
 
 -------------------------------------------------------------------

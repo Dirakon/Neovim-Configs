@@ -22,7 +22,12 @@
 require('telescope').setup {
   defaults = {
     mappings = {
-      i = {},
+      i = {
+        ['<C-p>'] = require('myLuaConf.plugins.telescope.pickers').paste_into_prompt,
+      },
+      n = {
+        ['<leader>P'] = require('myLuaConf.plugins.telescope.pickers').paste_into_prompt,
+      },
     },
     prompt_prefix = " ",
     selection_caret = " ",
