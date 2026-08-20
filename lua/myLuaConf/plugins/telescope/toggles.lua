@@ -7,16 +7,71 @@ M.toggles = {
 }
 
 -- Custom toggles loaded from env vars / defaults (populated by load_env_toggles)
--- Each entry: { key = "TESTS", pattern = "...", lua_patterns = {...}, enabled_text = "...", disabled_text = "...", keybind = "<C-t>", state = false }
+-- Each entry: {
+--   key          = "TESTS",
+--   patterns     = { "**/tests/**" },          -- ripgrep globs
+--   lua_patterns = { "/tests/" },              -- lua patterns for LSP pickers
+--   mode_texts   = { include = "See [T]ests", exclude = "No [T]ests", only = "Only [T]ests" },
+--   keybind      = "<C-t>",
+--   modes        = { "include", "exclude", "only" },  -- ordered set of allowed modes
+--   mode_index   = 1,                          -- pointer into `modes`
+-- }
+--
+-- Mode semantics:
+--   include = the regex/glob is ignored (everything is kept)
+--   exclude = a file path must NOT match the regexes (ripgrep `--glob !p`,
+--             LSP `file_ignore_patterns`)
+--   only    = a file path MUST match the regexes (ripgrep `--glob p`; for LSP
+--             pickers a best-effort entry filter is applied when possible)
 M.custom_toggles = {}
 
 local defaults = require('myLuaConf.plugins.telescope.default_env')
 
+-- The three modes with defined semantics. The user may select any ordered
+-- subset of these via TELESCOPE_<NAME>_MODES.
+local KNOWN_MODES = { include = true, exclude = true, only = true }
+
+-- Fallback status text for a mode when no *_TEXT env var is defined.
+local DEFAULT_TEXT = {
+  include = function(name) return "See " .. name end,
+  exclude = function(name) return "No " .. name end,
+  only    = function(name) return "Only " .. name end,
+}
+
 -- Read a toggle's fields from env vars, falling back to defaults
 local function toggle_from_env(name)
+  -- Collect numbered PATTERNS_x (x is a number) from defaults, then let env override per-index
+  local collected = {}
+  for k, v in pairs(defaults) do
+    local n = k:match("^TELESCOPE_" .. name .. "_PATTERNS_(%d+)$")
+    if n and v and v ~= "" then
+      collected[tonumber(n)] = v
+    end
+  end
+  for k, v in pairs(vim.fn.environ()) do
+    local n = k:match("^TELESCOPE_" .. name .. "_PATTERNS_(%d+)$")
+    if n and v and v ~= "" then
+      collected[tonumber(n)] = v
+    end
+  end
+
   local pattern_key = "TELESCOPE_" .. name .. "_PATTERN"
-  local pattern = vim.env[pattern_key] or defaults[pattern_key]
-  if not pattern then return nil end
+  local single_pattern = vim.env[pattern_key] or defaults[pattern_key]
+
+  local patterns = {}
+  if next(collected) ~= nil then
+    -- PATTERNS_x overrides single PATTERN
+    local indices = {}
+    for idx in pairs(collected) do table.insert(indices, idx) end
+    table.sort(indices)
+    for _, idx in ipairs(indices) do
+      table.insert(patterns, collected[idx])
+    end
+  elseif single_pattern then
+    patterns = { single_pattern }
+  else
+    return nil
+  end
 
   local lua_pattern_key = "TELESCOPE_" .. name .. "_LUA_PATTERNS"
   local lua_raw = vim.env[lua_pattern_key] or defaults[lua_pattern_key]
@@ -27,27 +82,50 @@ local function toggle_from_env(name)
     end
   end
 
-  local enabled_text_pattern = "TELESCOPE_" .. name .. "_ENABLED_TEXT"
-  local enabled_text = vim.env[enabled_text_pattern] or defaults[enabled_text_pattern] or ("See " .. name)
+  -- Per-mode status text. Each is optional; missing ones get a fallback.
+  local mode_texts = {}
+  for mode, _ in pairs(KNOWN_MODES) do
+    local text_key = "TELESCOPE_" .. name .. "_" .. mode:upper() .. "_TEXT"
+    mode_texts[mode] = vim.env[text_key] or defaults[text_key] or DEFAULT_TEXT[mode](name)
+  end
 
-  local disabled_text_pattern = "TELESCOPE_" .. name .. "_DISABLED_TEXT"
-  local disabled_text = vim.env[disabled_text_pattern] or defaults[disabled_text_pattern] or ("No " .. name)
+  -- Ordered set of allowed modes (defaults to the full set).
+  local modes_key = "TELESCOPE_" .. name .. "_MODES"
+  local modes_raw = vim.env[modes_key] or defaults[modes_key] or "include, exclude, only"
+  local modes = {}
+  for mode in modes_raw:gmatch("[^,]+") do
+    mode = mode:match("^%s*(.-)%s*$")  -- trim
+    if KNOWN_MODES[mode] then
+      table.insert(modes, mode)
+    end
+  end
+  if #modes == 0 then
+    modes = { "include" }
+  end
+
+  -- Starting mode (defaults to the first allowed mode).
+  local default_key = "TELESCOPE_" .. name .. "_DEFAULT"
+  local default_val = vim.env[default_key] or defaults[default_key] or modes[1]
+
+  local mode_index = 1
+  for i, mode in ipairs(modes) do
+    if mode == default_val then
+      mode_index = i
+      break
+    end
+  end
 
   local keybind_pattern = "TELESCOPE_" .. name .. "_KEYBIND"
   local keybind = vim.env[keybind_pattern] or defaults[keybind_pattern]
 
-  local default_pattern = "TELESCOPE_" .. name .. "_DEFAULT"
-  local default_val = vim.env[default_pattern] or defaults[default_pattern]
-  local state = default_val == "on"
-
   return {
-    key = name,
-    pattern = pattern,
+    key          = name,
+    patterns     = patterns,
     lua_patterns = lua_patterns,
-    enabled_text = enabled_text,
-    disabled_text = disabled_text,
-    keybind = keybind,
-    state = state,
+    mode_texts   = mode_texts,
+    keybind      = keybind,
+    modes        = modes,
+    mode_index   = mode_index,
   }
 end
 
@@ -57,6 +135,11 @@ function M.load_env_toggles()
   local seen = {}
   for k, _ in pairs(defaults) do
     local name = k:match("^TELESCOPE_(%w+)_PATTERN$")
+    if name then
+      seen[name] = true
+    end
+    -- Discover toggles that define numbered PATTERNS_x
+    name = k:match("^TELESCOPE_(%w+)_PATTERNS_%d+$")
     if name then
       seen[name] = true
     end
@@ -70,6 +153,10 @@ function M.load_env_toggles()
   -- Discover additional toggles from env vars
   for k, v in pairs(vim.fn.environ()) do
     local name = k:match("^TELESCOPE_(%w+)_PATTERN$")
+    if name and v and v ~= "" then
+      seen[name] = true
+    end
+    name = k:match("^TELESCOPE_(%w+)_PATTERNS_%d+$")
     if name and v and v ~= "" then
       seen[name] = true
     end
@@ -90,11 +177,17 @@ function M.load_env_toggles()
   table.sort(M.custom_toggles, function(a, b) return a.key < b.key end)
 end
 
--- Toggle state by keybind, return the toggle's name
-function M.toggle_by_keybind(keybind)
+-- Current mode of a toggle
+local function current_mode(t)
+  return t.modes[t.mode_index]
+end
+
+-- Cycle a toggle's mode by keybind, advancing to the next allowed mode (wraps
+-- around). Returns the toggle's key, or nil if no toggle matched.
+function M.cycle_by_keybind(keybind)
   for _, t in ipairs(M.custom_toggles) do
     if t.keybind == keybind then
-      t.state = not t.state
+      t.mode_index = (t.mode_index % #t.modes) + 1
       return t.key
     end
   end
@@ -116,7 +209,7 @@ end
 function M.status_line()
   local parts = {}
   for _, t in ipairs(M.custom_toggles) do
-    table.insert(parts, t.state and t.enabled_text or t.disabled_text)
+    table.insert(parts, t.mode_texts[current_mode(t)])
   end
 
   if M.toggles.hidden then    table.insert(parts, "See [H]idden")   end
@@ -152,11 +245,17 @@ function M.build_vimgrep_args()
     table.insert(args, "--no-ignore")
   end
 
-  -- Custom toggles (state=false means exclude)
   for _, t in ipairs(M.custom_toggles) do
-    if not t.state then
-      table.insert(args, "--glob")
-      table.insert(args, "!" .. t.pattern)
+    local mode = current_mode(t)
+    for _, p in ipairs(t.patterns) do
+      if mode == "exclude" then
+        table.insert(args, "--glob")
+        table.insert(args, "!" .. p)
+      elseif mode == "only" then
+        table.insert(args, "--glob")
+        table.insert(args, p)
+      end
+      -- include: glob is ignored
     end
   end
 
@@ -180,20 +279,26 @@ function M.build_find_command()
   end
 
   for _, t in ipairs(M.custom_toggles) do
-    if not t.state then
-      table.insert(find_command, "--glob")
-      table.insert(find_command, "!" .. t.pattern)
+    local mode = current_mode(t)
+    for _, p in ipairs(t.patterns) do
+      if mode == "exclude" then
+        table.insert(find_command, "--glob")
+        table.insert(find_command, "!" .. p)
+      elseif mode == "only" then
+        table.insert(find_command, "--glob")
+        table.insert(find_command, p)
+      end
     end
   end
 
   return find_command
 end
 
--- Build file_ignore_patterns for LSP pickers based on current toggle state
+-- Build file_ignore_patterns for LSP pickers (the `exclude` mode).
 function M.build_file_ignore_patterns()
   local patterns = {}
   for _, t in ipairs(M.custom_toggles) do
-    if not t.state then
+    if current_mode(t) == "exclude" then
       for _, p in ipairs(t.lua_patterns) do
         table.insert(patterns, p)
       end
